@@ -20,6 +20,6 @@ public:
 
 	cocos2d::Sprite* main;
 
-	void update(float f);
+	
 	void SceneEnd(float f);
 };

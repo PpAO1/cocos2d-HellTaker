@@ -1,4 +1,5 @@
 #include "MainScene00.h"
+#include "GameManager.h"
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -18,22 +19,24 @@ bool MainScene00::init()
 	{
 		return false;
 	}
-	player = new Player();
 
 	auto wlayer = LayerColor::create(Color4B::BLACK);
 	this->addChild(wlayer);
 
+	GameManager* gameLayer = &GameManager::getInstance();
+	gameLayer->getInstance();
+	gameLayer->setAnchorPoint(Vec2(0, 0));
+	gameLayer->setZOrder(1000);
+	gameLayer->init();
+	this->addChild(gameLayer);
+
 	main = Sprite::create("Sprite/chapterBG0001.png");
 	main->setAnchorPoint(Vec2(0, 0));
 	main->setPosition(0, 0);
-	main->setZOrder(1000);
+	main->setZOrder(1);
 	this->addChild(main);
 
 	return true;
-}
-
-void MainScene00::update(float f)
-{
 }
 
 void MainScene00::SceneEnd(float f)

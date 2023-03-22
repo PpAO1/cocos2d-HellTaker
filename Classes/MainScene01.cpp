@@ -21,9 +21,6 @@ bool MainScene01::init()
 	return true;
 }
 
-void MainScene01::update(float f)
-{
-}
 
 void MainScene01::SceneEnd(float f)
 {

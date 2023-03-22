@@ -17,6 +17,5 @@ public:
 	cocos2d::Sprite* main;
 	cocos2d::Label* plabel;
 
-	void update(float f);
 	void SceneEnd(float f);
 };

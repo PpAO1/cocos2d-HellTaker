@@ -1,6 +1,6 @@
 #include "Prologue2.h"
 #include "Prologue.h"
-//#include "MainScene00.h"
+#include "MainScene00.h"
 //#include "MainScene01.h"
 //#include "MainScene02.h"
 
@@ -289,14 +289,13 @@ void Prologue2::ChapterChoice(float f)
 
 void Prologue2::GameStart(float f)
 {
-	/*if (chapterOrder == 0)
+	if (chapterOrder == 0)
 	{
 		auto pScene = MainScene00::create();
 		_director->getTextureCache()->removeUnusedTextures();
-		this->removeAllChildrenWithCleanup(true);
 		Director::getInstance()->replaceScene(pScene);
 	}
-	else if (chapterOrder == 1)
+	/*else if (chapterOrder == 1)
 	{
 		auto pScene = MainScene01::create();
 		_director->getTextureCache()->removeUnusedTextures();

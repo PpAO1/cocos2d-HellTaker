@@ -20,3 +20,7 @@ bool MainCutScene00::init()
 
 	return true;
 }
+
+void MainCutScene00::SceneEnd(float f)
+{
+}

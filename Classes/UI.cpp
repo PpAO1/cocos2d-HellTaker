@@ -2,19 +2,15 @@
 
 USING_NS_CC;
 
-Scene* UI::createScene()
-{
-	return UI::create();
-}
-
 bool UI::init()
 {
-	if (!Scene::init())
-	{
-		return false;
-	}
-
 	_startAnim = Sprite::create("Sprite/transition0002.png");
+	_startAnim->setPosition(Vec2(0, 0));
+	_startAnim->setAnchorPoint(Vec2(0, 0));
+	this->setContentSize(Size(Director::getWinSize);
+	this->addChild(_startAnim);
+	this->StartAnim();
+
 	return true;
 }
 
