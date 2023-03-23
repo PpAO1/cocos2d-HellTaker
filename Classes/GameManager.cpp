@@ -7,6 +7,7 @@ GameManager* GameManager::_instance = nullptr;
 
 GameManager::GameManager()
 {
+
 }
 
 GameManager::~GameManager()
@@ -23,14 +24,27 @@ GameManager& GameManager::getInstance()
 
 bool GameManager::init()
 {
-	auto wlayer = LayerColor::create(Color4B::WHITE);
-	this->addChild(wlayer);
 	ui = new UI;
 
 	ui->setPosition(Vec2(0, 0));
 	ui->setAnchorPoint(Vec2(0, 0));
-	ui->setZOrder(1111);
+	ui->setZOrder(500);
 	ui->init();
 	this->addChild(ui);
 	return true;
+}
+
+void GameManager::FileDataRead()
+{
+	switch (Stage)
+	{
+	case Stage1:
+		break;
+	case Stage2:
+		break;
+	case Stage3:
+		break;
+	default:
+		break;
+	}
 }

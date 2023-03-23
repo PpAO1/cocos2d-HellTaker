@@ -5,8 +5,8 @@
 #define MAP_WIDTH 28
 #define MAP_HEIGHT 31
 
-#define CELL_WIDTH 17
-#define CELL_HEIGHT 17
+#define CELL_WIDTH 75
+#define CELL_HEIGHT 75
 
 enum MapObject
 {
@@ -19,6 +19,13 @@ enum MapObject
 	LOCK,
 	KEY,
 	NPC
+};
+
+enum Stage
+{
+	Stage1 = 1,
+	Stage2,
+	Stage3
 };
 
 

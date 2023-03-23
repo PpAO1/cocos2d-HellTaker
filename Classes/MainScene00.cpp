@@ -26,7 +26,7 @@ bool MainScene00::init()
 	GameManager* gameLayer = &GameManager::getInstance();
 	gameLayer->getInstance();
 	gameLayer->setAnchorPoint(Vec2(0, 0));
-	gameLayer->setZOrder(1000);
+	gameLayer->setZOrder(2);
 	gameLayer->init();
 	this->addChild(gameLayer);
 
