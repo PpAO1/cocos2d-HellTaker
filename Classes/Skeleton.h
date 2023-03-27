@@ -3,7 +3,12 @@
 
 class Skeleton : public cocos2d::Layer 
 {
-public:
+private:
 	Skeleton();
 	~Skeleton();
+	static Skeleton* _instance;
+
+public:
+	static Skeleton& getInstance();
+
 };

@@ -4,9 +4,10 @@
 class Player : public cocos2d::Layer
 {
 private:
-	
+	Player ();
+	~Player ();
+	static Player* _instance;
 
 public:
-	Player();
-	~Player();
+	static Player& getInstance();
 };

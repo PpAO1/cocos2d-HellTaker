@@ -2,8 +2,8 @@
 #include <fstream>
 #include <string>
 
-#define MAP_WIDTH 28
-#define MAP_HEIGHT 31
+#define STAGE1_WIDTH 10
+#define STAGE1_HEIGHT 9
 
 #define CELL_WIDTH 75
 #define CELL_HEIGHT 75

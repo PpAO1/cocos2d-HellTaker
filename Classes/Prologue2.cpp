@@ -279,7 +279,7 @@ void Prologue2::GameExit(float f)
 
 void Prologue2::ChapterChoice(float f)
 {
-	order = prologueEnum::CHAPTERCHOICE;
+	order = prologueEnum::GAMESTART;
 	menuLayer->removeAllChildrenWithCleanup(true);
 	SetChapterSelectMenu();
 
@@ -474,7 +474,7 @@ void Prologue2::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::E
 		}
 		break;
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-		if (order == prologueEnum::CHAPTERCHOICE)
+		if (order == prologueEnum::GAMESTART)
 		{
 			switch (chapterOrder)
 			{
@@ -493,7 +493,7 @@ void Prologue2::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::E
 		}
 		break;
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-		if (order == prologueEnum::CHAPTERCHOICE)
+		if (order == prologueEnum::GAMESTART)
 		{
 			switch (chapterOrder)
 			{

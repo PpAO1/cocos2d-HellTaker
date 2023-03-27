@@ -3,7 +3,10 @@
 
 class Spike : public cocos2d::Layer
 {
-public:
+private:
 	Spike();
 	~Spike();
+	static Spike* _instance;
+public:
+	static Spike& getInstance();
 };
