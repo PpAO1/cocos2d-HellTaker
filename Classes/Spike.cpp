@@ -13,8 +13,7 @@ Spike::~Spike()
 
 Spike& Spike::getInstance()
 {
-	if (_instance == nullptr)
-		_instance = new Spike();
+	_instance = new Spike();
 
 	return *_instance;
 }

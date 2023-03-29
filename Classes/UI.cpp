@@ -2,6 +2,16 @@
 
 USING_NS_CC;
 
+UI* UI::_instance = nullptr;
+
+UI::UI()
+{
+}
+
+UI::~UI()
+{
+}
+
 bool UI::init()
 {
 	this->setContentSize(Size(_director->getWinSize().width, _director->getWinSize().height));
@@ -20,6 +30,13 @@ bool UI::init()
 	this->StartAnim();
 
 	return true;
+}
+
+UI& UI::getInstance()
+{
+	_instance = new UI();
+
+	return *_instance;
 }
 
 void UI::StartAnim()

@@ -2,11 +2,13 @@
 #include <fstream>
 #include <string>
 
-#define STAGE1_WIDTH 10
-#define STAGE1_HEIGHT 9
+#define STAGE1_WIDTH 9
+#define STAGE1_HEIGHT 8
+#define STAGE1_START_POS_X 510
+#define STAGE1_START_POS_Y 140
 
-#define CELL_WIDTH 75
-#define CELL_HEIGHT 75
+#define CELL_WIDTH 100
+#define CELL_HEIGHT 100
 
 enum MapObject
 {
@@ -34,6 +36,7 @@ class Coordinate
 public:
 	int x;
 	int y;
+	
 
 	Coordinate()
 	{

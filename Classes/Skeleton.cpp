@@ -13,8 +13,7 @@ Skeleton::~Skeleton()
 
 Skeleton& Skeleton::getInstance()
 {
-	if (_instance == nullptr)
-		_instance = new Skeleton();
+	_instance = new Skeleton();
 
 	return *_instance;
 }

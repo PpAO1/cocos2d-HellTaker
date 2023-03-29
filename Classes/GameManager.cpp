@@ -7,7 +7,7 @@ GameManager* GameManager::_instance = nullptr;
 
 GameManager::GameManager()
 {
-
+	stage1StartPos = Vec2(510, 140);
 }
 
 GameManager::~GameManager()
@@ -24,22 +24,29 @@ GameManager& GameManager::getInstance()
 
 bool GameManager::init()
 {
-	ui = new UI;
+	UI* ui = &UI::getInstance();
 
 	ui->setPosition(Vec2(0, 0));
 	ui->setAnchorPoint(Vec2(0, 0));
 	ui->setZOrder(500);
 	ui->init();
 	this->addChild(ui);
+
+	this->FileDataRead();
 	return true;
 }
 
 void GameManager::FileDataRead()
 {
-	switch (stage)
+	TextFileRead("stage1.txt", 9);
+	SetPlayerPos(STAGE1_WIDTH, STAGE1_HEIGHT);
+	SetObjectsPos(STAGE1_WIDTH, STAGE1_HEIGHT);
+	/*switch (stage)
 	{
-	case Stage1:
-		TextFileRead("Stage1.txt", 10);
+	case Stage::Stage1:
+		TextFileRead("stage1.txt", 9);
+		SetPlayerPos(STAGE1_WIDTH, STAGE1_HEIGHT);
+		SetObjectsPos(STAGE1_WIDTH, STAGE1_HEIGHT);
 		break;
 	case Stage2:
 		break;
@@ -47,7 +54,7 @@ void GameManager::FileDataRead()
 		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 void GameManager::TextFileRead(std::string str, int width)
@@ -101,30 +108,56 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			auto Obj = Sprite::create();
 			string fileName = "null";
 
+			Node* object;
+
 			if (stage1Map[i][j] == MapObject::SKELETON)
 			{
-				Skeleton* pSkeleton = &Skeleton::getInstance();
+				/*Skeleton* pSkeleton = &Skeleton::getInstance();
+				pSkeleton->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pSkeleton->setAnchorPoint(Vec2(0, 0));
+				pSkeleton->setZOrder(3);
+				this->addChild(pSkeleton);*/
+
+				object = &Skeleton::getInstance();
 			}
 			else if (stage1Map[i][j] == MapObject::SPIKE)
 			{
-				Spike* pSpike = &Spike::getInstance();
+				object = &Spike::getInstance();
+				/*pSpike->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pSpike->setAnchorPoint(Vec2(0, 0));
+				pSpike->setZOrder(3);
+				this->addChild(pSpike);*/
 			}
 			else if (stage1Map[i][j] == MapObject::ROCK)
 			{
-				
+				object = &Rock::getInctance();
+		/*		pRock->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pRock->setAnchorPoint(Vec2(0, 0));
+				pRock->setZOrder(3);
+				this->addChild(pRock);*/
 			}
 			else if (stage1Map[i][j] == MapObject::KEY)
 			{
-				fileName = "Key.png";
+				object = &Key::getInstance();
+				/*pKey->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pKey->setAnchorPoint(Vec2(0, 0));
+				pKey->setZOrder(3);*/
 			}
 			else if (stage1Map[i][j] == MapObject::LOCK)
 			{
-				fileName = "Lock.png";
+				object = &Lock::getInstance();
+				/*pLock->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));*/
 			}
 			else if (stage1Map[i][j] == MapObject::NPC)
 			{
 				fileName = "Stage1NPC.png";
 			}
+
+			object->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+			object->setAnchorPoint(Vec2(0, 0));
+			object->setZOrder(3);
+			this->addChild(object); 
+			
 
 			if (fileName != "null")
 			{
@@ -134,6 +167,8 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 				Obj->setZOrder(2);
 				this->addChild(Obj);
 			}
+
+			object->removeAllChildrenWithCleanup(true);
 		}
 	}
 }
