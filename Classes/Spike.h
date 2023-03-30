@@ -8,5 +8,7 @@ private:
 	~Spike();
 	static Spike* _instance;
 public:
+	cocos2d::Sprite* pSpike;
 	static Spike& getInstance();
+	virtual bool init();
 };

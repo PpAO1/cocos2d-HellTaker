@@ -9,5 +9,7 @@ private:
 	static Lock* _instance;
 
 public:
+	cocos2d::Sprite* pLock;
 	static Lock& getInstance();
+	virtual bool init();
 };

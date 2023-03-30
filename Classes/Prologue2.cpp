@@ -88,13 +88,7 @@ void Prologue2::ButtonAnim()
 	animation->setDelayPerUnit(0.05f);
 
 	char str[100] = { 0 };
-	for (int i = 2; i < 20;i++)
-	{
-		sprintf(str, "Sprite/booper00%d.png", i);
-		animation->addSpriteFrameWithFile(str);
-	}
-
-	for (int i = 19; i > 3; i--)
+	for (int i = 1; i < 18 ; i++)
 	{
 		sprintf(str, "Sprite/booper00%d.png", i);
 		animation->addSpriteFrameWithFile(str);

@@ -22,6 +22,13 @@ bool UI::init()
 	_startAnim->setZOrder(3);
 	this->addChild(_startAnim);
 
+	TTFConfig ttfconfig("Font/The_Jamsil_3_Regular.ttf", 30);
+	menuLabel = Label::createWithTTF(ttfconfig, " ● 인생조언 [ L 버튼 ] ●                   ● 재시작 [ R 버튼 ] ● ");
+	menuLabel->setTextColor(Color4B::WHITE);
+	menuLabel->setPosition(500, 200);
+	menuLabel->setZOrder(3);
+	this->addChild(menuLabel);
+
 	Spritecrete(right_spr, "Sprite/mainUIexport_fUI0001.png", Vec2(1920, 0), Vec2(1, 0), 2, true);
 	Spritecrete(left_spr, "Sprite/mainUIexport_fUI0001.png", Vec2(0, 0), Vec2(0, 0), 2, false);
 	Spritecrete(right_spr2, "Sprite/mainUIexport_bUI2.png", Vec2(1920, 1080), Vec2(1, 1), 1, true);
@@ -35,6 +42,11 @@ bool UI::init()
 UI& UI::getInstance()
 {
 	_instance = new UI();
+
+	if (_instance && _instance->init())
+		_instance->autorelease();
+	else
+		CC_SAFE_DELETE(_instance);
 
 	return *_instance;
 }

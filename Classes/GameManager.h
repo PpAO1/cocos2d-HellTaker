@@ -22,6 +22,8 @@ public:
 	int stage1Map[STAGE1_HEIGHT][STAGE1_WIDTH];
 
 	cocos2d::Vec2 stage1StartPos;
+	cocos2d::Label* moveCount;
+	cocos2d::Label* stageCount;
 
 	static GameManager& getInstance();
 	virtual bool init();

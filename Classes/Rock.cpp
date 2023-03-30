@@ -25,7 +25,7 @@ Rock& Rock::getInctance()
 
 bool Rock::init()
 {
-	rock = Sprite::create("Sprite/hero0022.png");
+	rock = Sprite::create("Sprite/boxExport0001.png");
 	this->setContentSize(rock->getContentSize());
 	this->addChild(rock);
 	return true;

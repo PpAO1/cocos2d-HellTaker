@@ -17,6 +17,7 @@ public:
 	cocos2d::Sprite* left_spr;
 	cocos2d::Sprite* right_spr2;
 	cocos2d::Sprite* left_spr2;
+	cocos2d::Label* menuLabel;
 
 	static UI& getInstance();
 	void StartAnim();
