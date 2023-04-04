@@ -13,7 +13,7 @@ public:
 	static Skeleton& getInstance();
 	virtual bool init();
 
-	void SkeletonIdleAnim();
+	void SkeletonIdleAnim(float f);
 	void SkeletonDamagedAnim();
 	void SkeletonDieAnim();
 

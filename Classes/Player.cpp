@@ -60,16 +60,37 @@ void Player::PlayerMoveAnim()
 {
 	pPlayer->stopAllActions();
 
-	auto animation = Animation::create();
+	auto dust = Sprite::create("Sprite/small_vfx0001.png");
+	dust->setPosition(pPlayer->getPosition());
+	dust->setZOrder(1);
+	this->addChild(dust);
 
-	animation->setDelayPerUnit(0.07f);
+	auto dustAnim = Animation::create();
+
+	dustAnim->setDelayPerUnit(0.07f);
 
 	char str[100] = { 0, };
 
+	for (int i = 1; i < 4; i++)
+	{
+		sprintf(str, "Sprite/small_vfx000%d.png", i);
+		dustAnim->addSpriteFrameWithFile(str);
+	}
+
+	auto dustAnimation = Animate::create(dustAnim);
+	RemoveSelf* removeanim = RemoveSelf::create(dustAnimation);
+	dust->runAction(Sequence::create(dustAnimation, removeanim, nullptr));
+
+	auto animation = Animation::create();
+
+	animation->setDelayPerUnit(0.1f);
+
+	char str2[100] = { 0, };
+
 	for (int i = 3; i < 9; i++)
 	{
-		sprintf(str, "Sprite/assets100V2005%d.png", i);
-		animation->addSpriteFrameWithFile(str);
+		sprintf(str2, "Sprite/assets100V2005%d.png", i);
+		animation->addSpriteFrameWithFile(str2);
 	}
 
 	auto animate = Animate::create(animation);
@@ -118,10 +139,8 @@ void Player::PlayerDamagedAnim()
 	}
 
 	auto animate = Animate::create(animation);
-	huge->runAction(animate);
-
-	auto blinkAnim = Blink::create(1.0f, 4);
-	pPlayer->runAction(blinkAnim);
+	RemoveSelf* removeanim = RemoveSelf::create(animation);
+	huge->runAction(Sequence::create(animate, removeanim, nullptr));
 }
 
 
@@ -129,6 +148,12 @@ void Player::PlayerDamagedAnim()
 void Player::update(float f)
 {
 
+}
+
+void Player::PlayerMove(cocos2d::Vec2 pos)
+{
+	auto playermove = MoveBy::create(0.15f, pos);
+	pPlayer->runAction(playermove);
 }
 
 void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event)
@@ -140,17 +165,26 @@ void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 		break;
 
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
-		this->PlayerHitAnim();
+		this->PlayerMoveAnim();
+		PlayerMove(Vec2(0, 100));
+		
 		break;
 
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		this->PlayerDamagedAnim();
+		this->PlayerMoveAnim();
+		PlayerMove(Vec2(0, -100));
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		this->PlayerMoveAnim();
+		pPlayer->setFlippedX(true);
+		PlayerMove(Vec2(-100, 0));
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		this->PlayerMoveAnim();
+		pPlayer->setFlippedX(false);
+		PlayerMove(Vec2(100, 0));
 		break;
 	}
 }

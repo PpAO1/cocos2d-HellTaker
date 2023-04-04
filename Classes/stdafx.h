@@ -7,8 +7,8 @@
 #define STAGE1_START_POS_X 560
 #define STAGE1_START_POS_Y 210
 
-#define CELL_WIDTH 100
-#define CELL_HEIGHT 100
+#define CELL 100
+
 
 enum MapObject
 {

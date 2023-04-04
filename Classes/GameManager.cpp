@@ -93,7 +93,8 @@ void GameManager::SetPlayerPos(int stageHeight, int stageWidth)
 			if (stage1Map[i][j] == MapObject::PLAYER)
 			{
 				Player* pPlayer = &Player::getInstance();
-				pPlayer->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pPlayer->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
+				pPlayer->_mapPos = Coordinate(j, i);
 				pPlayer->setAnchorPoint(Vec2(0, 0));
 				pPlayer->setZOrder(2);
 				this->addChild(pPlayer);
@@ -114,7 +115,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			if (stage1Map[i][j] == MapObject::SKELETON)
 			{
 				Skeleton* pSkeleton = &Skeleton::getInstance();
-				pSkeleton->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pSkeleton->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
 				pSkeleton->setAnchorPoint(Vec2(0, 0));
 				pSkeleton->setZOrder(3);
 				this->addChild(pSkeleton);
@@ -122,7 +123,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			else if (stage1Map[i][j] == MapObject::SPIKE)
 			{
 				Spike* pSpike = &Spike::getInstance();
-				pSpike->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pSpike->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
 				pSpike->setAnchorPoint(Vec2(0, 0));
 				pSpike->setZOrder(3);
 				this->addChild(pSpike);
@@ -130,7 +131,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			else if (stage1Map[i][j] == MapObject::ROCK)
 			{
 				Rock* pRock = &Rock::getInctance();
-				pRock->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pRock->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
 				pRock->setAnchorPoint(Vec2(0, 0));
 				pRock->setZOrder(3);
 				this->addChild(pRock);
@@ -138,7 +139,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			else if (stage1Map[i][j] == MapObject::KEY)
 			{
 				Key* pKey = &Key::getInstance();
-				pKey->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pKey->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
 				pKey->setAnchorPoint(Vec2(0, 0));
 				pKey->setZOrder(3);
 				this->addChild(pKey);
@@ -146,7 +147,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			else if (stage1Map[i][j] == MapObject::LOCK)
 			{
 				Lock* pLock = &Lock::getInstance();
-				pLock->setPosition((STAGE1_START_POS_X + (j * CELL_WIDTH)), (STAGE1_START_POS_Y + (i * CELL_HEIGHT)));
+				pLock->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
 				pLock->setAnchorPoint(Vec2(0, 0));
 				pLock->setZOrder(3);
 				this->addChild(pLock);
