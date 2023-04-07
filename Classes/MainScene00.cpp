@@ -1,5 +1,4 @@
 #include "MainScene00.h"
-#include "GameManager.h"
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -23,7 +22,7 @@ bool MainScene00::init()
 	auto wlayer = LayerColor::create(Color4B::BLACK);
 	this->addChild(wlayer);
 
-	GameManager* gameLayer = &GameManager::getInstance();
+	gameLayer = &GameManager::getInstance();
 	gameLayer->getInstance();
 	gameLayer->setAnchorPoint(Vec2(0, 0));
 	gameLayer->setZOrder(2);
@@ -41,4 +40,22 @@ bool MainScene00::init()
 
 void MainScene00::SceneEnd(float f)
 {
+}
+
+void MainScene00::update(float f)
+{
+	if(gameLayer->isRestart == true)
+		scheduleOnce(schedule_selector(MainScene00::Restart), 1.5f);
+}
+
+void MainScene00::Restart(float f)
+{
+	gameLayer->removeAllChildrenWithCleanup(true);
+
+	gameLayer = &GameManager::getInstance();
+	gameLayer->getInstance();
+	gameLayer->setAnchorPoint(Vec2(0, 0));
+	gameLayer->setZOrder(2);
+	gameLayer->init();
+	this->addChild(gameLayer);
 }

@@ -124,6 +124,38 @@ void Skeleton::SkeletonDamagedAnim()
 
 void Skeleton::SkeletonDieAnim()
 {
+	pSkeleton->setOpacity(0);
+	auto damagedEffect = Sprite::create("Sprite/small_vfx0015.png");
+	damagedEffect->setPosition(pSkeleton->getPosition());
+	damagedEffect->setZOrder(1);
+	this->addChild(damagedEffect);
+
+	auto EffectAnim = Animation::create();
+
+	EffectAnim->setDelayPerUnit(0.1f);
+
+	char str3[100] = { 0, };
+
+	for (int i = 15; i < 18; i++)
+	{
+		sprintf(str3, "Sprite/small_vfx00%d.png", i);
+		EffectAnim->addSpriteFrameWithFile(str3);
+	}
+
+	auto EffectAnimate = Animate::create(EffectAnim);
+	RemoveSelf* removeanim = RemoveSelf::create(EffectAnimate);
+	damagedEffect->runAction(Sequence::create(EffectAnimate, removeanim, nullptr));
+
+	//-----------------------------------------------------------------------------
+
+	auto Born = Sprite::create("Sprite/particle0004.png");
+	Born->setPosition(pSkeleton->getPositionX(), (pSkeleton->getPositionY() - 20));
+	Born->setZOrder(1);
+	this->addChild(Born);
+
+	auto BornAction = JumpBy::create(0.4f, Vec2(0, 0), 70, 1);
+	auto BornAction2 = Hide::create();
+	Born->runAction(Sequence::create(BornAction, BornAction2, nullptr));
 }
 
 void Skeleton::SkeletonMove(cocos2d::Vec2 pos)

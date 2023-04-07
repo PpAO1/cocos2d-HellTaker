@@ -14,5 +14,6 @@ public:
 	cocos2d::Sprite* rock;
 	static Rock& getInctance();
 	void RockMove(cocos2d::Vec2 pos);
+	void RockMoveAnim();
 	virtual bool init();
 };

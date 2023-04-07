@@ -155,3 +155,65 @@ void Player::PlayerMove(cocos2d::Vec2 pos)
 	auto playermove = MoveBy::create(0.15f, pos);
 	pPlayer->runAction(playermove);
 }
+
+void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event)
+{
+	switch (keycode)
+	{
+	case EventKeyboard::KeyCode::KEY_R:
+		break;
+
+	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+		break;
+
+	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		break;
+
+	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		pPlayer->setFlippedX(true);
+		break;
+
+	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		pPlayer->setFlippedX(false);
+		break;
+	}
+}
+
+void Player::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event)
+{
+	switch (keycode)
+	{
+	case EventKeyboard::KeyCode::KEY_R:
+		break;
+
+	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+		break;
+
+	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		break;
+
+	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+		break;
+
+	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+		break;
+	}
+}
+
+void Player::onEnter()
+{
+	Layer::onEnter();
+
+	_listener = EventListenerKeyboard::create();
+
+	_listener->onKeyPressed = CC_CALLBACK_2(Player::onKeyPressed, this);
+	_listener->onKeyReleased = CC_CALLBACK_2(Player::onKeyReleased, this);
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(_listener, this);
+}
+
+void Player::onExit()
+{
+	_eventDispatcher->removeEventListener(_listener);
+	Layer::onExit();
+}

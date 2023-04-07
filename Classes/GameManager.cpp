@@ -31,6 +31,8 @@ bool GameManager::init()
 	ui->setZOrder(500);
 	this->addChild(ui);
 
+	isRestart = false;
+
 	this->FileDataRead();
 	return true;
 }
@@ -178,26 +180,26 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 		}
 	}
 }
-
+//dpdpdpdpdpdpdpddpdpdp
 void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 {
-	if (stage1Map[oriX + offsetX][oriY + offsetY] == MapObject::WALL)
+	if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::WALL)
 	{
 		// 캐릭터의 경로가 벽인경우 아무런 로직이 실행되지 않음
 		return;
 	}
 
-	if (stage1Map[oriX + offsetX][oriY + offsetY] == MapObject::EMPTY)
+	if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::EMPTY)
 	{
 		// 캐릭터의 경로가 빈공간일경우, 캐릭터가 이동함.
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
-		stage1Map[oriX][oriY] = MapObject::EMPTY;
-		stage1Map[oriX + offsetX][oriY + offsetY] = MapObject::PLAYER;
+		stage1Map[oriY][oriX] = MapObject::EMPTY;
+		stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::PLAYER;
 		pPlayer->_mapPos.x += offsetX;
 		pPlayer->_mapPos.y += offsetY;
 	}
-	else if (stage1Map[oriX + offsetX][oriY + offsetY] == MapObject::SKELETON)
+	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::SKELETON)
 	{
 		// 캐릭터의 경로에 스켈레톤이 있을경우, 그 스켈레톤을 찾아서 밀침.
 		Skeleton* pskeleton;
@@ -214,24 +216,24 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		auto x = pskeleton->_mapPos.x;
 		auto y = pskeleton->_mapPos.y;
 
-		if (stage1Map[x + offsetX][y + offsetY] = MapObject::EMPTY)
+		if (stage1Map[y + offsetY][x + offsetX] == MapObject::EMPTY)
 		{
 			pPlayer->PlayerHitAnim();
 			pskeleton->SkeletonDamagedAnim();
 			pskeleton->SkeletonMove(pos);
 			pskeleton->_mapPos.x += offsetX;
 			pskeleton->_mapPos.y += offsetY;
-			stage1Map[x][y] = MapObject::EMPTY;
-			stage1Map[x + offsetX][y + offsetY] = MapObject::SKELETON;
+			stage1Map[y][x] = MapObject::EMPTY;
+			stage1Map[y + offsetY][x + offsetX] = MapObject::SKELETON;
 		}
 		else
 		{
 			pPlayer->PlayerHitAnim();
 			pskeleton->SkeletonDieAnim();
-			stage1Map[x][y] = MapObject::EMPTY;
+			stage1Map[y][x] = MapObject::EMPTY;
 		}
 	}
-	else if (stage1Map[oriX + offsetX][oriY + offsetY] == MapObject::ROCK)
+	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::ROCK)
 	{
 		// 캐릭터의 경로에 바위가 있을경우 바위를 밀침, 가시 외 뒤에 다른 오브젝트가 있다면 밀쳐지지 않음
 		Rock* prock;
@@ -248,65 +250,68 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		auto x = prock->_mapPos.x;
 		auto y = prock->_mapPos.y;
 
-		if (stage1Map[x + offsetX][y + offsetY] = MapObject::EMPTY)
+		if (stage1Map[y + offsetY][x + offsetX] == MapObject::EMPTY)
 		{
 			pPlayer->PlayerHitAnim();
 			prock->RockMove(pos);
+			prock->RockMoveAnim();
 			prock->_mapPos.x += offsetX;
 			prock->_mapPos.y += offsetY;
-			stage1Map[x][y] = MapObject::EMPTY;
-			stage1Map[x + offsetX][y + offsetY] = MapObject::ROCK;
+			stage1Map[y][x] = MapObject::EMPTY;
+			stage1Map[y + offsetY][x + offsetX] = MapObject::ROCK;
 
 		}
-		else if(stage1Map[x + offsetX][y + offsetY] = MapObject::SPIKE)
+		else if(stage1Map[y + offsetY][x + offsetX] == MapObject::SPIKE)
 		{
 			pPlayer->PlayerHitAnim();
 			prock->RockMove(pos);
+			prock->RockMoveAnim();
 			prock->_mapPos.x += offsetX;
 			prock->_mapPos.y += offsetY;
-			stage1Map[x][y] = MapObject::EMPTY;
-			stage1Map[x + offsetX][y + offsetY] = MapObject::SPIKEONROCK;
+			stage1Map[y][x] = MapObject::EMPTY;
+			stage1Map[y + offsetY][x + offsetX] = MapObject::SPIKEONROCK;
 		}
 	}
-	else if (stage1Map[oriX + offsetX][oriY + offsetY] == MapObject::SPIKE)
+	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::SPIKE)
 	{
 		// 캐릭터의 경로에 가시가 있을경우 이동은 되지만 피해를 입음.
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
-		stage1Map[oriX][oriY] = MapObject::EMPTY;
-		stage1Map[oriX + offsetX][oriY + offsetY] = MapObject::SPIKEONPLAYER;
+		stage1Map[oriY][oriX] = MapObject::EMPTY;
+		stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::SPIKEONPLAYER;
 		pPlayer->_mapPos.x += offsetX;
 		pPlayer->_mapPos.y += offsetY;
 	}
-	else if (stage1Map[oriX + offsetX][oriY + offsetY] == MapObject::KEY)
+	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::KEY)
 	{
 		// 캐릭터의 경로에 열쇠가 있을경우 이동해서 열쇠를 얻음.
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
 		pKey->KeyEating();
-		stage1Map[oriX][oriY] = MapObject::EMPTY;
-		stage1Map[oriX + offsetX][oriY + offsetY] = MapObject::PLAYER;
+		stage1Map[oriY][oriX] = MapObject::EMPTY;
+		stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::PLAYER;
 		pPlayer->_mapPos.x += offsetX;
 		pPlayer->_mapPos.y += offsetY;
 	}
-	else if (stage1Map[oriX + offsetX][oriY + offsetY] == MapObject::LOCK)
+	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::LOCK)
 	{
 		// 캐릭터의 경로에 자물쇠가 있을경우 열쇠를 먹은상태일때 이동되며 자물쇠가 풀림.
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
 		pLock->UnLock();
-		stage1Map[oriX][oriY] = MapObject::EMPTY;
-		stage1Map[oriX + offsetX][oriY + offsetY] = MapObject::PLAYER;
+		stage1Map[oriY][oriX] = MapObject::EMPTY;
+		stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::PLAYER;
 		pPlayer->_mapPos.x += offsetX;
 		pPlayer->_mapPos.y += offsetY;
 	}
-	else if (stage1Map[oriX + offsetX][oriY + offsetY] == MapObject::GOAL)
+	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::GOAL)
 	{
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
 		this->StageClear();
 	}
 }
+//papapapapapapa
 
 void GameManager::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event)
 {
@@ -376,7 +381,37 @@ void GameManager::StageClear()
 {
 }
 
-void GameManager::ReStart()
+void GameManager::PlayerDie()
 {
+	auto wlayer = LayerColor::create(Color4B::BLACK);
+	wlayer->setPosition(Vec2(0, 0));
+	wlayer->setAnchorPoint(Vec2(0, 0));
+	wlayer->setZOrder(2);
+	this->addChild(wlayer);
+
+	pPlayer->setOpacity(0);
+
+	auto damagedEffect = Sprite::create("Sprite/death_P1.png");
+	damagedEffect->setPosition(pPlayer->getPosition());
+	damagedEffect->setZOrder(1);
+	this->addChild(damagedEffect);
+
+	auto EffectAnim = Animation::create();
+
+	EffectAnim->setDelayPerUnit(0.7f);
+
+	char str3[100] = { 0, };
+
+	for (int i = 1; i < 19; i++)
+	{
+		sprintf(str3, "Sprite/death_P%d.png", i);
+		EffectAnim->addSpriteFrameWithFile(str3);
+	}
+
+	auto EffectAnimate = Animate::create(EffectAnim);
+	RemoveSelf* removeanim = RemoveSelf::create(EffectAnimate);
+	damagedEffect->runAction(Sequence::create(EffectAnimate, removeanim, nullptr));
+	
+	isRestart = true;
 }
 
