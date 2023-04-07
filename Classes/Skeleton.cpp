@@ -126,6 +126,12 @@ void Skeleton::SkeletonDieAnim()
 {
 }
 
+void Skeleton::SkeletonMove(cocos2d::Vec2 pos)
+{
+	auto skeletonmove = MoveBy::create(0.15f, pos);
+	pSkeleton->runAction(skeletonmove);
+}
+
 void Skeleton::update(float f)
 {
 }

@@ -20,7 +20,10 @@ enum MapObject
 	ROCK,
 	LOCK,
 	KEY,
-	NPC
+	NPC,
+	GOAL,
+	SPIKEONROCK,
+	SPIKEONPLAYER
 };
 
 enum Stage

@@ -12,4 +12,5 @@ public:
 	cocos2d::Sprite* pLock;
 	static Lock& getInstance();
 	virtual bool init();
+	void UnLock();
 };

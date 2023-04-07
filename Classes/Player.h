@@ -24,9 +24,4 @@ public:
 	void PlayerDamagedAnim();
 	void update(float f);
 	void PlayerMove(cocos2d::Vec2 pos);
-
-	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
-	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
-	void onEnter();
-	void onExit();
 };

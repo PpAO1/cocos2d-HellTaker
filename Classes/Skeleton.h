@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "stdafx.h"
 
 class Skeleton : public cocos2d::Layer 
 {
@@ -16,6 +17,9 @@ public:
 	void SkeletonIdleAnim(float f);
 	void SkeletonDamagedAnim();
 	void SkeletonDieAnim();
+
+	Coordinate _mapPos;
+	void SkeletonMove(cocos2d::Vec2 pos);
 
 	void update(float f);
 

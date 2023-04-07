@@ -23,6 +23,12 @@ Rock& Rock::getInctance()
 	return *_instance;
 }
 
+void Rock::RockMove(cocos2d::Vec2 pos)
+{
+	auto rockmove = MoveBy::create(0.15f, pos);
+	rock->runAction(rockmove);
+}
+
 bool Rock::init()
 {
 	rock = Sprite::create("Sprite/boxExport0001.png");
