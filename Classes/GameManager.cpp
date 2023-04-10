@@ -65,15 +65,33 @@ void GameManager::TextFileRead(std::string str, int width)
 	if (readFile.is_open())
 	{
 		int i = 0, j = 0;
+		char temp = ' ';
+
 		while (!readFile.eof())
 		{
 			char nObjNum;
 
 			readFile.get(nObjNum);
 
-			if (nObjNum == ' ' || nObjNum == '\n')
+			if (nObjNum == ' ' || nObjNum == '\n') {
+				temp = ' ';
 				continue;
+			}
+			else if (temp != ' ') {
+				char array[2];
+				array[0] = temp;
+				array[1] = nObjNum;
 
+				std::string str = std::string(array);
+
+				auto value = stoi(str);
+
+				stage1Map[i][j - 1] = value;
+				temp = ' ';
+				continue;
+			}
+
+			temp = nObjNum;
 			stage1Map[i][j] = nObjNum - '0';
 			j++;
 
@@ -114,12 +132,9 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			auto Obj = Sprite::create();
 			string fileName = "null";
 
-			Node* node;
-
 			if (stage1Map[i][j] == MapObject::SKELETON)
 			{
-				node = &Skeleton::getInstance();
-				auto pSkeleton = static_cast<Skeleton*>(node);
+				auto pSkeleton = &Skeleton::getInstance();
 				SetObjects(pSkeleton, j, i);
 				pSkeleton->_mapPos = Coordinate(j, i);
 				skeletonVec.push_back(pSkeleton);
@@ -130,8 +145,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			}
 			else if (stage1Map[i][j] == MapObject::ROCK)
 			{
-				node = &Rock::getInctance();
-				auto pRock = static_cast<Rock*>(node);
+				auto pRock = &Rock::getInctance();
 				SetObjects(pRock, j, i);
 				pRock->_mapPos = Coordinate(j, i);
 				rockVec.push_back(pRock);
@@ -143,8 +157,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			//d
 			else if (stage1Map[i][j] == MapObject::SPIKE)
 			{
-				node = &Spike::getInstance();
-				auto pSpike = static_cast<Spike*>(node);
+				auto pSpike = &Spike::getInstance();
 				SetObjects(pSpike, j, i);
 				/*pSpike->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
 				pSpike->setAnchorPoint(Vec2(0, 0));
@@ -153,8 +166,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			}
 			else if (stage1Map[i][j] == MapObject::KEY)
 			{
-				node = &Key::getInstance();
-				pKey = static_cast<Key*>(node);
+				auto pKey = &Key::getInstance();
 				SetObjects(pKey, j, i);
 				/*pKey->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
 				pKey->setAnchorPoint(Vec2(0, 0));
@@ -163,8 +175,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			}
 			else if (stage1Map[i][j] == MapObject::LOCK)
 			{
-				node = &Lock::getInstance();
-				pLock = static_cast<Lock*>(node);
+				auto pLock = &Lock::getInstance();
 				SetObjects(pLock, j, i);
 				/*pLock->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
 				pLock->setAnchorPoint(Vec2(0, 0));
@@ -173,14 +184,13 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			}
 			else if (stage1Map[i][j] == MapObject::NPC)
 			{
-				node = &Npc::getInstance();
-				auto pNpc = static_cast<Npc*>(node);
+				auto pNpc = &Npc::getInstance();
 				SetObjects(pNpc, j, i);
 			}
 		}
 	}
 }
-//dpdpdpdpdpdpdpddpdpdp
+
 void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 {
 	if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::WALL)
@@ -203,11 +213,11 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 	{
 		// 캐릭터의 경로에 스켈레톤이 있을경우, 그 스켈레톤을 찾아서 밀침.
 		Skeleton* pskeleton;
-		for (int i = 0; i < skeletonVec.size(); i++) 
+		for (int i = 0; i < skeletonVec.size(); i++)
 		{
-		auto skeleton =	skeletonVec[i];
+			auto skeleton = skeletonVec[i];
 
-			if (skeleton->_mapPos.x == oriX + offsetX && skeleton->_mapPos.y == oriY + offsetY) 
+			if (skeleton->_mapPos.x == oriX + offsetX && skeleton->_mapPos.y == oriY + offsetY)
 			{
 				pskeleton = skeleton;
 				break;
@@ -250,7 +260,7 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		auto x = prock->_mapPos.x;
 		auto y = prock->_mapPos.y;
 
-		if (stage1Map[y + offsetY][x + offsetX] == MapObject::EMPTY)
+		if (stage1Map[y + offsetY][x + offsetX] == MapObject::EMPTY || stage1Map[y + offsetY][x + offsetX] == MapObject::GOAL)
 		{
 			pPlayer->PlayerHitAnim();
 			prock->RockMove(pos);
@@ -261,7 +271,7 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 			stage1Map[y + offsetY][x + offsetX] = MapObject::ROCK;
 
 		}
-		else if(stage1Map[y + offsetY][x + offsetX] == MapObject::SPIKE)
+		else if (stage1Map[y + offsetY][x + offsetX] == MapObject::SPIKE)
 		{
 			pPlayer->PlayerHitAnim();
 			prock->RockMove(pos);
@@ -411,7 +421,7 @@ void GameManager::PlayerDie()
 	auto EffectAnimate = Animate::create(EffectAnim);
 	RemoveSelf* removeanim = RemoveSelf::create(EffectAnimate);
 	damagedEffect->runAction(Sequence::create(EffectAnimate, removeanim, nullptr));
-	
+
 	isRestart = true;
 }
 
