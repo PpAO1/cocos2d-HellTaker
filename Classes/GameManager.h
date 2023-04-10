@@ -25,15 +25,16 @@ private:
 
 public:
 	int stage1Map[STAGE1_HEIGHT][STAGE1_WIDTH];
+	int MoveChance;
 
 	bool isRestart;
 
 	cocos2d::Vec2 stage1StartPos;
-	cocos2d::Label* moveCount;
-	cocos2d::Label* stageCount;
+
 	Player* pPlayer;
 	Key* pKey;
 	Lock* pLock;
+	UI* ui;
 
 	std::vector<Skeleton*> skeletonVec;
 	std::vector<Rock*> rockVec;
@@ -55,7 +56,8 @@ public:
 	void onExit();
 	
 	void StageClear();
-	void PlayerDie();
+	void PlayerDie(float f);
+	void update(float f);
 };
 
 template<typename T>

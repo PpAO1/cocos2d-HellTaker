@@ -18,6 +18,8 @@ public:
 	cocos2d::Sprite* right_spr2;
 	cocos2d::Sprite* left_spr2;
 	cocos2d::Label* menuLabel;
+	cocos2d::Label* moveChanceLabel;
+	cocos2d::Label* stageCountLabel;
 
 	static UI& getInstance();
 	void StartAnim();

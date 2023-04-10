@@ -24,7 +24,7 @@ GameManager& GameManager::getInstance()
 
 bool GameManager::init()
 {
-	UI* ui = &UI::getInstance();
+	 ui = &UI::getInstance();
 
 	ui->setPosition(Vec2(0, 0));
 	ui->setAnchorPoint(Vec2(0, 0));
@@ -34,6 +34,7 @@ bool GameManager::init()
 	isRestart = false;
 
 	this->FileDataRead();
+	this->scheduleUpdate();
 	return true;
 }
 
@@ -42,6 +43,9 @@ void GameManager::FileDataRead()
 	TextFileRead("stage1.txt", 9);
 	SetPlayerPos(STAGE1_WIDTH, STAGE1_HEIGHT);
 	SetObjectsPos(STAGE1_WIDTH, STAGE1_HEIGHT);
+	MoveChance = 23;
+	ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
+	ui->stageCountLabel->setString("Ⅰ");
 	/*switch (stage)
 	{
 	case Stage::Stage1:
@@ -320,6 +324,9 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		pPlayer->PlayerMove(pos);
 		this->StageClear();
 	}
+
+	--MoveChance;
+	ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
 }
 //papapapapapapa
 
@@ -391,24 +398,25 @@ void GameManager::StageClear()
 {
 }
 
-void GameManager::PlayerDie()
+void GameManager::PlayerDie(float f)
 {
-	auto wlayer = LayerColor::create(Color4B::BLACK);
+	ui->removeAllChildrenWithCleanup(true);
+	auto wlayer = LayerColor::create(Color4B(2,2,27,0)); //이거때문에 오류나는듯
 	wlayer->setPosition(Vec2(0, 0));
 	wlayer->setAnchorPoint(Vec2(0, 0));
-	wlayer->setZOrder(2);
+	wlayer->setZOrder(4);
 	this->addChild(wlayer);
 
 	pPlayer->setOpacity(0);
 
 	auto damagedEffect = Sprite::create("Sprite/death_P1.png");
 	damagedEffect->setPosition(pPlayer->getPosition());
-	damagedEffect->setZOrder(1);
+	damagedEffect->setZOrder(5);
 	this->addChild(damagedEffect);
 
 	auto EffectAnim = Animation::create();
 
-	EffectAnim->setDelayPerUnit(0.7f);
+	EffectAnim->setDelayPerUnit(0.07f);
 
 	char str3[100] = { 0, };
 
@@ -423,5 +431,11 @@ void GameManager::PlayerDie()
 	damagedEffect->runAction(Sequence::create(EffectAnimate, removeanim, nullptr));
 
 	isRestart = true;
+}
+
+void GameManager::update(float f)
+{
+	if (MoveChance == -1)
+		scheduleOnce(schedule_selector(GameManager::PlayerDie), 0.05f);
 }
 

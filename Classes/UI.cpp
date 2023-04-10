@@ -19,7 +19,7 @@ bool UI::init()
 	_startAnim = Sprite::create("Sprite/transition002.png");
 	_startAnim->setPosition(Vec2(960, 0));
 	_startAnim->setAnchorPoint(Vec2(0.5f, 0));
-	_startAnim->setZOrder(3);
+	_startAnim->setZOrder(10);
 	this->addChild(_startAnim);
 
 	TTFConfig ttfconfig("Font/The_Jamsil_3_Regular.ttf", 30);
@@ -33,6 +33,21 @@ bool UI::init()
 	Spritecrete(left_spr, "Sprite/mainUIexport_fUI0001.png", Vec2(0, 0), Vec2(0, 0), 2, false);
 	Spritecrete(right_spr2, "Sprite/mainUIexport_bUI2.png", Vec2(1920, 1080), Vec2(1, 1), 1, true);
 	Spritecrete(right_spr2, "Sprite/mainUIexport_bUI2.png", Vec2(0, 1080), Vec2(0, 1), 1, false);
+
+	TTFConfig ttfconfig2("Font/The_Jamsil_3_Regular.ttf", 100);
+	moveChanceLabel = Label::createWithTTF(ttfconfig2, " ");
+	moveChanceLabel->setTextColor(Color4B::WHITE);
+	moveChanceLabel->setZOrder(3);
+	moveChanceLabel->setAnchorPoint(Vec2(0, 0));
+	moveChanceLabel->setPosition(145, 200);
+	this->addChild(moveChanceLabel);
+
+	stageCountLabel = Label::createWithTTF(ttfconfig2, " ");
+	stageCountLabel->setTextColor(Color4B::WHITE);
+	stageCountLabel->setZOrder(3);
+	stageCountLabel->setAnchorPoint(Vec2(0, 0));
+	stageCountLabel->setPosition(1835, 200);
+	this->addChild(stageCountLabel);
 
 	this->StartAnim();
 
