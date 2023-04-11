@@ -25,4 +25,5 @@ public:
 	void SceneEnd(float f);
 	void update(float f);
 	void Restart(float f);
+	void ReleaseTest(float f);
 };

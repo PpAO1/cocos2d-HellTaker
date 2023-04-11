@@ -22,8 +22,8 @@ bool MainScene00::init()
 	auto wlayer = LayerColor::create(Color4B::BLACK);
 	this->addChild(wlayer);
 
+
 	gameLayer = &GameManager::getInstance();
-	gameLayer->getInstance();
 	gameLayer->setAnchorPoint(Vec2(0, 0));
 	gameLayer->setZOrder(2);
 	gameLayer->init();
@@ -46,8 +46,14 @@ void MainScene00::SceneEnd(float f)
 
 void MainScene00::update(float f)
 {
-	if(gameLayer->isRestart)
-		scheduleOnce(schedule_selector(MainScene00::Restart), 1.5f);
+	if (gameLayer->isRestart)
+	{
+		scheduleOnce(schedule_selector(MainScene00::Restart), 1.33f);
+		gameLayer->isRestart = false;
+
+		this->unscheduleUpdate();
+	}
+
 }
 
 void MainScene00::Restart(float f)
@@ -61,6 +67,10 @@ void MainScene00::Restart(float f)
 	gameLayer->init();
 	this->addChild(gameLayer);*/
 	_director->getTextureCache()->removeUnusedTextures();
+
+	gameLayer->removeAllChildren();
+	gameLayer->removeFromParentAndCleanup(true);
+
 	auto pScene = MainScene00::createScene();
 	Director::getInstance()->replaceScene(pScene);
 }

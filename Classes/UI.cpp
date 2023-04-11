@@ -10,6 +10,7 @@ UI::UI()
 
 UI::~UI()
 {
+	this->removeAllChildrenWithCleanup(true);
 }
 
 bool UI::init()
@@ -64,6 +65,10 @@ UI& UI::getInstance()
 		CC_SAFE_DELETE(_instance);
 
 	return *_instance;
+}
+
+void UI::ReleaseInstance()
+{
 }
 
 void UI::StartAnim()

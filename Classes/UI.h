@@ -22,6 +22,8 @@ public:
 	cocos2d::Label* stageCountLabel;
 
 	static UI& getInstance();
+	static void ReleaseInstance();
+
 	void StartAnim();
 	void Spritecrete(cocos2d::Sprite* sprite, std::string str, cocos2d::Vec2 pos, cocos2d::Vec2 anchorpos, int zorder, bool Flipped);
 

@@ -40,6 +40,8 @@ public:
 	std::vector<Rock*> rockVec;
 
 	static GameManager& getInstance();
+	static void ReleaseInstance();
+
 	virtual bool init();
 	void FileDataRead();
 	void TextFileRead(std::string str, int width);

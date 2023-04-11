@@ -16,10 +16,15 @@ GameManager::~GameManager()
 
 GameManager& GameManager::getInstance()
 {
-	if (_instance == nullptr)
+	if (_instance == NULL)
 		_instance = new GameManager();
 
 	return *_instance;
+}
+
+void GameManager::ReleaseInstance()
+{
+	delete(_instance);
 }
 
 bool GameManager::init()
@@ -325,8 +330,16 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		this->StageClear();
 	}
 
-	--MoveChance;
-	ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
+	if (MoveChance <= 1)
+	{
+		--MoveChance;
+		ui->moveChanceLabel->setString("X");
+	}
+	else
+	{
+		--MoveChance;
+		ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
+	}
 }
 //papapapapapapa
 
@@ -400,7 +413,7 @@ void GameManager::StageClear()
 
 void GameManager::PlayerDie(float f)
 {
-	ui->removeAllChildrenWithCleanup(true);
+	
 	auto wlayer = LayerColor::create(Color4B(2,2,27,0)); //이거때문에 오류나는듯
 	wlayer->setPosition(Vec2(0, 0));
 	wlayer->setAnchorPoint(Vec2(0, 0));
@@ -435,7 +448,7 @@ void GameManager::PlayerDie(float f)
 
 void GameManager::update(float f)
 {
-	if (MoveChance == -1)
-		scheduleOnce(schedule_selector(GameManager::PlayerDie), 0.05f);
+	if (MoveChance == 0)
+		scheduleOnce(schedule_selector(GameManager::PlayerDie), 0.01f);
 }
 
