@@ -28,6 +28,7 @@ public:
 	int MoveChance;
 
 	bool isRestart;
+	bool pressF;
 
 	cocos2d::Vec2 stage1StartPos;
 

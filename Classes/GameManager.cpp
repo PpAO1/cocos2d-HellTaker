@@ -37,6 +37,7 @@ bool GameManager::init()
 	this->addChild(ui);
 
 	isRestart = false;
+	pressF = false;
 
 	this->FileDataRead();
 	this->scheduleUpdate();
@@ -166,7 +167,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			//d
 			else if (stage1Map[i][j] == MapObject::SPIKE)
 			{
-				auto pSpike = &Spike::getInstance();
+				auto pSpike = new Spike(MapObject::SPIKE, isRestart);
 				SetObjects(pSpike, j, i);
 				/*pSpike->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
 				pSpike->setAnchorPoint(Vec2(0, 0));
@@ -235,7 +236,7 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		auto x = pskeleton->_mapPos.x;
 		auto y = pskeleton->_mapPos.y;
 
-		if (stage1Map[y + offsetY][x + offsetX] == MapObject::EMPTY)
+		if (stage1Map[y + offsetY][x + offsetX] == MapObject::EMPTY || stage1Map[y + offsetY][x + offsetX] == MapObject::MOVESPUKEDOWN)
 		{
 			pPlayer->PlayerHitAnim();
 			pskeleton->SkeletonDamagedAnim();
@@ -290,12 +291,17 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 			stage1Map[y][x] = MapObject::EMPTY;
 			stage1Map[y + offsetY][x + offsetX] = MapObject::SPIKEONROCK;
 		}
+		else if (stage1Map[y + offsetY][x + offsetX] == MapObject::ROCK)
+		{
+			pPlayer->PlayerHitAnim();
+		}
 	}
 	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::SPIKE)
 	{
 		// 캐릭터의 경로에 가시가 있을경우 이동은 되지만 피해를 입음.
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
+		pPlayer->PlayerDamagedAnim();
 		stage1Map[oriY][oriX] = MapObject::EMPTY;
 		stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::SPIKEONPLAYER;
 		pPlayer->_mapPos.x += offsetX;
@@ -348,6 +354,7 @@ void GameManager::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d:
 	switch (keycode)
 	{
 	case EventKeyboard::KeyCode::KEY_R:
+		pressF = true;
 		break;
 
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
@@ -414,22 +421,22 @@ void GameManager::StageClear()
 void GameManager::PlayerDie(float f)
 {
 	
-	auto wlayer = LayerColor::create(Color4B(2,2,27,0)); //이거때문에 오류나는듯
+	auto wlayer = LayerColor::create(Color4B(2,2,27,255));
 	wlayer->setPosition(Vec2(0, 0));
 	wlayer->setAnchorPoint(Vec2(0, 0));
-	wlayer->setZOrder(4);
+	wlayer->setZOrder(6);
 	this->addChild(wlayer);
 
 	pPlayer->setOpacity(0);
 
 	auto damagedEffect = Sprite::create("Sprite/death_P1.png");
-	damagedEffect->setPosition(pPlayer->getPosition());
-	damagedEffect->setZOrder(5);
+	damagedEffect->setPosition(pPlayer->getPosition()); // 플레이어의 위치를 못 불러옴..; 이상함 이거
+	damagedEffect->setZOrder(7);
 	this->addChild(damagedEffect);
 
 	auto EffectAnim = Animation::create();
 
-	EffectAnim->setDelayPerUnit(0.07f);
+	EffectAnim->setDelayPerUnit(0.1f);
 
 	char str3[100] = { 0, };
 

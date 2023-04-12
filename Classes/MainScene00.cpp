@@ -48,8 +48,16 @@ void MainScene00::update(float f)
 {
 	if (gameLayer->isRestart)
 	{
-		scheduleOnce(schedule_selector(MainScene00::Restart), 1.33f);
+		scheduleOnce(schedule_selector(MainScene00::Restart), 1.8f);
 		gameLayer->isRestart = false;
+
+		this->unscheduleUpdate();
+	}
+
+	if (gameLayer->pressF)
+	{
+		scheduleOnce(schedule_selector(MainScene00::Restart), 0.01f);
+		gameLayer->pressF = false;
 
 		this->unscheduleUpdate();
 	}
@@ -66,7 +74,8 @@ void MainScene00::Restart(float f)
 	gameLayer->setZOrder(2);
 	gameLayer->init();
 	this->addChild(gameLayer);*/
-	_director->getTextureCache()->removeUnusedTextures();
+
+	/*_director->getTextureCache()->removeUnusedTextures();  <- 렉 걸리게하는 주범! */
 
 	gameLayer->removeAllChildren();
 	gameLayer->removeFromParentAndCleanup(true);
