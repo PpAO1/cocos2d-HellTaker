@@ -285,7 +285,6 @@ void Prologue2::GameStart(float f)
 {
 	if (chapterOrder == 0)
 	{
-
 		auto pScene = MainScene00::create();
 		_director->getTextureCache()->removeUnusedTextures();
 		Director::getInstance()->replaceScene(pScene);

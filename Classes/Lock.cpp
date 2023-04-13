@@ -55,5 +55,5 @@ void Lock::UnLock()
 	RemoveSelf* removeanim = RemoveSelf::create(EffectAnimate);
 	unlockEffect->runAction(Sequence::create(EffectAnimate, removeanim, nullptr));
 
-	pLock->removeAllChildrenWithCleanup(true);
+	pLock->setOpacity(0);
 }

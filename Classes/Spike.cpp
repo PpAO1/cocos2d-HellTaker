@@ -10,7 +10,7 @@ Spike::~Spike()
 {
 }
 
-Spike::Spike(int objNum, bool up)
+Spike::Spike(int objNum)
 {
 	if (objNum == MapObject::SPIKE)
 	{
@@ -19,17 +19,17 @@ Spike::Spike(int objNum, bool up)
 
 		this->init();
 	}
-	else if (objNum == MapObject::MOVESPIKEUP || objNum == MapObject::MOVESPUKEDOWN)
+	else if (objNum == MapObject::MOVESPIKEUP)
 	{
 		isMove = true;
-		if (up)
-		{
-			isUp = true;
-		}
-		else
-		{
-			isUp = false;
-		}
+		isUp = true;
+
+		this->init();
+	}
+	else if (objNum == MapObject::MOVESPIKEDOWN)
+	{
+		isMove = true;
+		isUp = false;
 
 		this->init();
 	}
@@ -54,7 +54,7 @@ bool Spike::init()
 
 void Spike::SpikeAnim()
 {
-	if (isUp == true && isMove == true)
+	if (isUp)
 	{
 		isUp = false;
 
@@ -73,7 +73,7 @@ void Spike::SpikeAnim()
 		auto animate = Animate::create(animation);
 		pSpike->runAction(animate);
 	}
-	else if(isUp == false && isMove == true)
+	else
 	{
 		isUp = true;
 
@@ -99,19 +99,31 @@ void Spike::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event
 	switch (keycode)
 	{
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
-		SpikeAnim();
+		if (isMove)
+		{
+			SpikeAnim();
+		}
 		break;
 
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		SpikeAnim();
+		if (isMove)
+		{
+			SpikeAnim();
+		}
 		break;
 
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-		SpikeAnim();
+		if (isMove)
+		{
+			SpikeAnim();
+		}
 		break;
 
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-		SpikeAnim();
+		if (isMove)
+		{
+			SpikeAnim();
+		}
 		break;
 	}
 }

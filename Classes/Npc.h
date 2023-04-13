@@ -3,11 +3,14 @@
 
 class Npc : public cocos2d::Layer
 {
-private:
+public:
 	Npc();
 	~Npc();
-	static Npc* _instance;
-public:
-	static Npc& getInstance();
+	Npc(int stage);
+	int stageNum;
+	cocos2d::Sprite* loveSign;
+	cocos2d::Sprite* pNpc;
 	virtual bool init();
+	void LoveSignAnim();
+	void Stage1NpcAnim();
 };

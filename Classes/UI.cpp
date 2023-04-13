@@ -1,5 +1,9 @@
 #include "UI.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#pragma execution_character_set("utf-8");
+#endif
+
 USING_NS_CC;
 
 UI* UI::_instance = nullptr;
@@ -24,9 +28,10 @@ bool UI::init()
 	this->addChild(_startAnim);
 
 	TTFConfig ttfconfig("Font/The_Jamsil_3_Regular.ttf", 30);
-	menuLabel = Label::createWithTTF(ttfconfig, " ● 인생조언 [ L 버튼 ] ●                   ● 재시작 [ R 버튼 ] ● ");
+	menuLabel = Label::createWithTTF(ttfconfig, "●  재시작 R키  ●");
 	menuLabel->setTextColor(Color4B::WHITE);
-	menuLabel->setPosition(500, 200);
+	menuLabel->setAnchorPoint(Vec2(0.5f, 0));
+	menuLabel->setPosition(960, 50);
 	menuLabel->setZOrder(3);
 	this->addChild(menuLabel);
 
@@ -47,7 +52,7 @@ bool UI::init()
 	stageCountLabel->setTextColor(Color4B::WHITE);
 	stageCountLabel->setZOrder(3);
 	stageCountLabel->setAnchorPoint(Vec2(0, 0));
-	stageCountLabel->setPosition(1835, 200);
+	stageCountLabel->setPosition(1670, 200);
 	this->addChild(stageCountLabel);
 
 	this->StartAnim();

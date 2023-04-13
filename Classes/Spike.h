@@ -9,12 +9,14 @@ private:
 public:
 	Spike();
 	~Spike();
-	Spike(int objNum, bool up);
+	Spike(int objNum);
 
 	bool isMove;
 	bool isUp;
 	cocos2d::Sprite* pSpike;
 	virtual bool init();
+
+	Coordinate _mapPos;
 
 	void SpikeAnim();
 

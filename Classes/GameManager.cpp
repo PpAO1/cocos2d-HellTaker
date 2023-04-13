@@ -3,21 +3,32 @@
 USING_NS_CC;
 using namespace std;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#pragma execution_character_set("utf-8");
+#endif
+
 GameManager* GameManager::_instance = nullptr;
 
 GameManager::GameManager()
 {
 	stage1StartPos = Vec2(510, 140);
+
+}
+
+GameManager::GameManager(int index)
+{
+	this->index = index;
+	GameManager();
 }
 
 GameManager::~GameManager()
 {
 }
 
-GameManager& GameManager::getInstance()
+GameManager& GameManager::getInstance(int index)
 {
 	if (_instance == NULL)
-		_instance = new GameManager();
+		_instance = new GameManager(index);
 
 	return *_instance;
 }
@@ -46,26 +57,23 @@ bool GameManager::init()
 
 void GameManager::FileDataRead()
 {
-	TextFileRead("stage1.txt", 9);
-	SetPlayerPos(STAGE1_WIDTH, STAGE1_HEIGHT);
-	SetObjectsPos(STAGE1_WIDTH, STAGE1_HEIGHT);
-	MoveChance = 23;
-	ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
-	ui->stageCountLabel->setString("Ⅰ");
-	/*switch (stage)
+	switch (index)
 	{
-	case Stage::Stage1:
+	case 0:
 		TextFileRead("stage1.txt", 9);
 		SetPlayerPos(STAGE1_WIDTH, STAGE1_HEIGHT);
 		SetObjectsPos(STAGE1_WIDTH, STAGE1_HEIGHT);
+		MoveChance = 23;
+		ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
+		ui->stageCountLabel->setString("Ⅰ");
 		break;
-	case Stage2:
+	case 1:
 		break;
-	case Stage3:
+	case 2:
 		break;
 	default:
 		break;
-	}*/
+	}
 }
 
 void GameManager::TextFileRead(std::string str, int width)
@@ -159,42 +167,48 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 				SetObjects(pRock, j, i);
 				pRock->_mapPos = Coordinate(j, i);
 				rockVec.push_back(pRock);
-				/*pRock->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
-				pRock->setAnchorPoint(Vec2(0, 0));
-				pRock->setZOrder(3);
-				this->addChild(pRock);*/
 			}
-			//d
 			else if (stage1Map[i][j] == MapObject::SPIKE)
 			{
-				auto pSpike = new Spike(MapObject::SPIKE, isRestart);
+				auto pSpike = new Spike(MapObject::SPIKE);
 				SetObjects(pSpike, j, i);
-				/*pSpike->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
-				pSpike->setAnchorPoint(Vec2(0, 0));
-				pSpike->setZOrder(3);
-				this->addChild(pSpike);*/
+				pSpike->_mapPos = Coordinate(j, i);
+				spikeVec.push_back(pSpike);
+			}
+			else if (stage1Map[i][j] == MapObject::MOVESPIKEDOWN)
+			{
+				auto pSpike = new Spike(MapObject::MOVESPIKEDOWN);
+				SetObjects(pSpike, j, i);
+				pSpike->_mapPos = Coordinate(j, i);
+				spikeVec.push_back(pSpike);
+			}
+			else if (stage1Map[i][j] == MapObject::MOVESPIKEUP)
+			{
+				auto pSpike = new Spike(MapObject::MOVESPIKEUP);
+				SetObjects(pSpike, j, i);
+				pSpike->_mapPos = Coordinate(j, i);
+				spikeVec.push_back(pSpike);
+			}
+			else if (stage1Map[i][j] == MapObject::SPIKEONROCK)
+			{
+				auto pSpike = new Spike(MapObject::MOVESPIKEUP);
+				SetObjects(pSpike, j, i);
+				pSpike->_mapPos = Coordinate(j, i);
+				spikeVec.push_back(pSpike);
 			}
 			else if (stage1Map[i][j] == MapObject::KEY)
 			{
 				auto pKey = &Key::getInstance();
 				SetObjects(pKey, j, i);
-				/*pKey->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
-				pKey->setAnchorPoint(Vec2(0, 0));
-				pKey->setZOrder(3);
-				this->addChild(pKey);*/
 			}
 			else if (stage1Map[i][j] == MapObject::LOCK)
 			{
 				auto pLock = &Lock::getInstance();
 				SetObjects(pLock, j, i);
-				/*pLock->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
-				pLock->setAnchorPoint(Vec2(0, 0));
-				pLock->setZOrder(3);
-				this->addChild(pLock);*/
 			}
 			else if (stage1Map[i][j] == MapObject::NPC)
 			{
-				auto pNpc = &Npc::getInstance();
+				auto pNpc = new Npc(index);
 				SetObjects(pNpc, j, i);
 			}
 		}
@@ -209,15 +223,33 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		return;
 	}
 
+	if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::LOCK && pKey->isGetKey == false)
+	{
+		// 열쇠를 가지지 않은채로 자물쇠에 접근할때 아무런 로직이 실행되지 않음
+		return;
+	}
+
 	if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::EMPTY)
 	{
 		// 캐릭터의 경로가 빈공간일경우, 캐릭터가 이동함.
-		pPlayer->PlayerMoveAnim();
-		pPlayer->PlayerMove(pos);
-		stage1Map[oriY][oriX] = MapObject::EMPTY;
-		stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::PLAYER;
-		pPlayer->_mapPos.x += offsetX;
-		pPlayer->_mapPos.y += offsetY;
+		if (stage1Map[oriY][oriX] == MapObject::SPIKEONPLAYER)
+		{
+			pPlayer->PlayerMoveAnim();
+			pPlayer->PlayerMove(pos);
+			stage1Map[oriY][oriX] = MapObject::SPIKE;
+			stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::PLAYER;
+			pPlayer->_mapPos.x += offsetX;
+			pPlayer->_mapPos.y += offsetY;
+		}
+		else
+		{
+			pPlayer->PlayerMoveAnim();
+			pPlayer->PlayerMove(pos);
+			stage1Map[oriY][oriX] = MapObject::EMPTY;
+			stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::PLAYER;
+			pPlayer->_mapPos.x += offsetX;
+			pPlayer->_mapPos.y += offsetY;
+		}
 	}
 	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::SKELETON)
 	{
@@ -236,7 +268,7 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		auto x = pskeleton->_mapPos.x;
 		auto y = pskeleton->_mapPos.y;
 
-		if (stage1Map[y + offsetY][x + offsetX] == MapObject::EMPTY || stage1Map[y + offsetY][x + offsetX] == MapObject::MOVESPUKEDOWN)
+		if (stage1Map[y + offsetY][x + offsetX] == MapObject::EMPTY)
 		{
 			pPlayer->PlayerHitAnim();
 			pskeleton->SkeletonDamagedAnim();
@@ -245,12 +277,26 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 			pskeleton->_mapPos.y += offsetY;
 			stage1Map[y][x] = MapObject::EMPTY;
 			stage1Map[y + offsetY][x + offsetX] = MapObject::SKELETON;
+
+			if (stage1Map[oriY][oriX] == MapObject::SPIKEONPLAYER)
+			{
+				// 스켈레톤을 밀칠때 가시위에 있을경우 피해를 입고 움직일 기회가 하나 더 날라감.
+				pPlayer->PlayerDamagedAnim();
+				MoveChance--;
+			}
 		}
 		else
 		{
 			pPlayer->PlayerHitAnim();
 			pskeleton->SkeletonDieAnim();
 			stage1Map[y][x] = MapObject::EMPTY;
+
+			if (stage1Map[oriY][oriX] == MapObject::SPIKEONPLAYER)
+			{
+				// 스켈레톤을 밀칠때 가시위에 있을경우 피해를 입고 움직일 기회가 하나 더 날라감.
+				pPlayer->PlayerDamagedAnim();
+				MoveChance--;
+			}
 		}
 	}
 	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::ROCK)
@@ -280,6 +326,12 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 			stage1Map[y][x] = MapObject::EMPTY;
 			stage1Map[y + offsetY][x + offsetX] = MapObject::ROCK;
 
+			if (stage1Map[oriY][oriX] == MapObject::SPIKEONPLAYER)
+			{
+				// 바위를 밀칠때 가시위에 있을경우 피해를 입고 움직일 기회가 하나 더 날라감.
+				pPlayer->PlayerDamagedAnim();
+				MoveChance--;
+			}
 		}
 		else if (stage1Map[y + offsetY][x + offsetX] == MapObject::SPIKE)
 		{
@@ -298,14 +350,50 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 	}
 	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::SPIKE)
 	{
-		// 캐릭터의 경로에 가시가 있을경우 이동은 되지만 피해를 입음.
-		pPlayer->PlayerMoveAnim();
-		pPlayer->PlayerMove(pos);
-		pPlayer->PlayerDamagedAnim();
-		stage1Map[oriY][oriX] = MapObject::EMPTY;
-		stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::SPIKEONPLAYER;
-		pPlayer->_mapPos.x += offsetX;
-		pPlayer->_mapPos.y += offsetY;
+		Spike* pspike;
+		for (int i = 0; i < spikeVec.size(); i++)
+		{
+			auto spike = spikeVec[i];
+
+			if (spike->_mapPos.x == oriX + offsetX && spike->_mapPos.y == oriY + offsetY)
+			{
+				pspike = spike;
+				break;
+			}
+		}
+		
+		if (pspike->isMove == false)
+		{
+			// 캐릭터의 경로에 움직이지 않는가시가 있을경우 피해를 입음.
+			pPlayer->PlayerMoveAnim();
+			pPlayer->PlayerMove(pos);
+			pPlayer->PlayerDamagedAnim();
+			stage1Map[oriY][oriX] = MapObject::EMPTY;
+			stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::SPIKEONPLAYER;
+			pPlayer->_mapPos.x += offsetX;
+			pPlayer->_mapPos.y += offsetY;
+		}
+		else if (pspike->isMove == true && pspike->isUp == true)
+		{
+			// 캐릭터의 경로에 움직이는 가시가 올라와있을경우 이동할 때 가시가 내려가면서 피해를 입지 않음.
+			pPlayer->PlayerMoveAnim();
+			pPlayer->PlayerMove(pos);
+			stage1Map[oriY][oriX] = MapObject::EMPTY;
+			stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::SPIKEONPLAYER;
+			pPlayer->_mapPos.x += offsetX;
+			pPlayer->_mapPos.y += offsetY;
+		}
+		else if (pspike->isMove == true && pspike->isUp == false)
+		{
+			// 캐릭터의 경로에 움직이는 가시가 내려가있을경우 이동할 때 가시가 올라오면서 피해를 입음.
+			pPlayer->PlayerMoveAnim();
+			pPlayer->PlayerMove(pos);
+			pPlayer->PlayerDamagedAnim();
+			stage1Map[oriY][oriX] = MapObject::EMPTY;
+			stage1Map[oriY + offsetY][oriX + offsetX] = MapObject::SPIKEONPLAYER;
+			pPlayer->_mapPos.x += offsetX;
+			pPlayer->_mapPos.y += offsetY;
+		}
 	}
 	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::KEY)
 	{
@@ -318,7 +406,7 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		pPlayer->_mapPos.x += offsetX;
 		pPlayer->_mapPos.y += offsetY;
 	}
-	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::LOCK)
+	else if (stage1Map[oriY + offsetY][oriX + offsetX] == MapObject::LOCK && pKey->isGetKey == true)
 	{
 		// 캐릭터의 경로에 자물쇠가 있을경우 열쇠를 먹은상태일때 이동되며 자물쇠가 풀림.
 		pPlayer->PlayerMoveAnim();
@@ -347,7 +435,6 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
 	}
 }
-//papapapapapapa
 
 void GameManager::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event)
 {

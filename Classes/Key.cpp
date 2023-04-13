@@ -76,6 +76,6 @@ void Key::KeyEating()
 	RemoveSelf* removeanim = RemoveSelf::create(EffectAnimate);
 	eatingEffect->runAction(Sequence::create(EffectAnimate, removeanim, nullptr));
 
-	pKey->removeAllChildrenWithCleanup(true);
+	pKey->setOpacity(0);
 	isGetKey = true;
 }

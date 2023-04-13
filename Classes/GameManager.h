@@ -16,16 +16,18 @@ class GameManager : public cocos2d::Layer
 {
 private:
 	GameManager();
+	GameManager(int index);
 	~GameManager();
 
 	static GameManager* _instance;
 	cocos2d::EventListenerKeyboard* _listener;
 
 	Stage stage;
-
+	int index;
 public:
 	int stage1Map[STAGE1_HEIGHT][STAGE1_WIDTH];
 	int MoveChance;
+	int stageIndex;
 
 	bool isRestart;
 	bool pressF;
@@ -39,8 +41,9 @@ public:
 
 	std::vector<Skeleton*> skeletonVec;
 	std::vector<Rock*> rockVec;
+	std::vector<Spike*> spikeVec;
 
-	static GameManager& getInstance();
+	static GameManager& getInstance(int index);
 	static void ReleaseInstance();
 
 	virtual bool init();

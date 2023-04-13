@@ -21,6 +21,8 @@ public:
 
 	CREATE_FUNC(Prologue2);
 
+	int chapterOrder;
+
 	cocos2d::Sprite* pbackground1;
 	cocos2d::Sprite* pbackground2;
 	cocos2d::Sprite* button;
@@ -55,7 +57,7 @@ public:
 private:
 	cocos2d::EventListenerKeyboard* _listener;
 	bool _enter, _up, _down;
-	int order, menuOrder, chapterOrder;
+	int order, menuOrder;
 
 	cocos2d::Sprite* cutScene1;
 	cocos2d::Sprite* cutScene2;

@@ -24,13 +24,14 @@ enum MapObject
 	GOAL,
 	SPIKEONROCK,
 	SPIKEONPLAYER,
+	MOVESPIKEDOWN,
 	MOVESPIKEUP,
-	MOVESPUKEDOWN,
+	MOVESPIKEONROCK
 };
 
 enum Stage
 {
-	Stage1 = 1,
+	Stage1,
 	Stage2,
 	Stage3
 };

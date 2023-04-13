@@ -22,8 +22,7 @@ bool MainScene00::init()
 	auto wlayer = LayerColor::create(Color4B::BLACK);
 	this->addChild(wlayer);
 
-
-	gameLayer = &GameManager::getInstance();
+	gameLayer = &GameManager::getInstance(0);
 	gameLayer->setAnchorPoint(Vec2(0, 0));
 	gameLayer->setZOrder(2);
 	gameLayer->init();
@@ -61,7 +60,6 @@ void MainScene00::update(float f)
 
 		this->unscheduleUpdate();
 	}
-
 }
 
 void MainScene00::Restart(float f)
@@ -75,7 +73,7 @@ void MainScene00::Restart(float f)
 	gameLayer->init();
 	this->addChild(gameLayer);*/
 
-	/*_director->getTextureCache()->removeUnusedTextures();  <- 렉 걸리게하는 주범! */
+	/*_director->getTextureCache()->removeUnusedTextures();*/  //<- 렉 걸리게하는 주범! 
 
 	gameLayer->removeAllChildren();
 	gameLayer->removeFromParentAndCleanup(true);
