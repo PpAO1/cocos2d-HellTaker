@@ -1,6 +1,5 @@
 #pragma once
 #include "cocos2d.h"
-#include "Player.h"
 #include "GameManager.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

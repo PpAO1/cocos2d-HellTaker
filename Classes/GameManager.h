@@ -25,7 +25,10 @@ private:
 	Stage stage;
 	int index;
 public:
-	int stage1Map[STAGE1_HEIGHT][STAGE1_WIDTH];
+	std::vector<std::vector<int>> mapStage;
+
+	//int stage1Map[STAGE1_HEIGHT][STAGE1_WIDTH];
+
 	int MoveChance;
 	int stageIndex;
 
@@ -48,7 +51,7 @@ public:
 
 	virtual bool init();
 	void FileDataRead();
-	void TextFileRead(std::string str, int width);
+	void TextFileRead(std::string str, int width, int height);
 	void SetPlayerPos(int stageHeight, int stageWidth);
 	void SetObjectsPos(int stageHeight, int stageWidth);
 

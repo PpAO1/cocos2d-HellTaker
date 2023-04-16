@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "GameManager.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #pragma execution_character_set("utf-8");
@@ -7,6 +8,8 @@
 
 class MainScene01 : public cocos2d::Scene
 {
+private:
+
 public:
 	static cocos2d::Scene* createScene();
 
@@ -14,8 +17,14 @@ public:
 
 	CREATE_FUNC(MainScene01);
 
+	GameManager* gameLayer;
+
 	cocos2d::Sprite* main;
-	cocos2d::Label* plabel;
+
+	int stageNum;
 
 	void SceneEnd(float f);
+	void update(float f);
+	void Restart(float f);
+	void ReleaseTest(float f);
 };

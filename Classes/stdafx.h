@@ -2,8 +2,10 @@
 #include <fstream>
 #include <string>
 
-#define STAGE1_WIDTH 9
-#define STAGE1_HEIGHT 8
+#define STAGE1_WIDTH 8
+#define STAGE1_HEIGHT 9
+#define STAGE2_WIDTH 8
+#define STAGE2_HEIGHT 9
 #define STAGE1_START_POS_X 560
 #define STAGE1_START_POS_Y 210
 
