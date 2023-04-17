@@ -24,6 +24,7 @@ private:
 
 	Stage stage;
 	int index;
+
 public:
 	std::vector<std::vector<int>> mapStage;
 

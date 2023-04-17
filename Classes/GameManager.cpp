@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "MainCutScene00.h"
 
 USING_NS_CC;
 using namespace std;
@@ -73,12 +74,12 @@ void GameManager::FileDataRead()
 		ui->stageCountLabel->setString("Ⅰ");
 		break;
 	case 1:
-		TextFileRead("Tese2.txt", STAGE2_HEIGHT, STAGE2_WIDTH);
+		TextFileRead("stage2.txt", STAGE2_HEIGHT, STAGE2_WIDTH);
 		SetPlayerPos(STAGE2_WIDTH, STAGE2_HEIGHT);
 		SetObjectsPos(STAGE2_WIDTH, STAGE2_HEIGHT);
 		MoveChance = 30;
 		ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
-		ui->stageCountLabel->setString("Ⅰ");
+		ui->stageCountLabel->setString("Ⅱ");
 		break;
 	case 2:
 		break;
@@ -166,7 +167,7 @@ void GameManager::SetPlayerPos(int stageHeight, int stageWidth)
 				pPlayer->_mapPos = Coordinate(j, i);
 				origin = Coordinate(j, i);
 				pPlayer->setAnchorPoint(Vec2(0, 0));
-				pPlayer->setZOrder(4);
+				pPlayer->setZOrder(5);
 				this->addChild(pPlayer);
 			}
 		}
@@ -197,6 +198,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			{
 				auto pRock = &Rock::getInctance();
 				SetObjects(pRock, j, i);
+				pRock->setZOrder(4);
 				pRock->_mapPos = Coordinate(j, i);
 				rockVec.push_back(pRock);
 			}
@@ -212,17 +214,18 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 
 				auto pRock = &Rock::getInctance();
 				SetObjects(pRock, j, i);
+				pRock->setZOrder(4);
 				pRock->_mapPos = Coordinate(j, i);
 				rockVec.push_back(pRock);
 			}
 			else if (mapStage[i][j] == MapObject::KEY)
 			{
-				auto pKey = &Key::getInstance();
+				auto pKey = new Key;
 				SetObjects(pKey, j, i);
 			}
 			else if (mapStage[i][j] == MapObject::LOCK)
 			{
-				auto pLock = &Lock::getInstance();
+				auto pLock = new Lock;
 				SetObjects(pLock, j, i);
 			}
 			else if (mapStage[i][j] == MapObject::NPC)
@@ -371,6 +374,48 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		pPlayer->_mapPos.x += offsetX;
 		pPlayer->_mapPos.y += offsetY;
 	}
+	else if (mapStage[oriY + offsetY][oriX + offsetX] == MapObject::SPIKEONROCK)
+	{
+		// 캐릭터의 경로에 바위가 있을경우 바위를 밀침, 가시 외 뒤에 다른 오브젝트가 있다면 밀쳐지지 않음
+		Rock* prock;
+		for (int i = 0; i < rockVec.size(); ++i)
+		{
+			auto rock = rockVec[i];
+
+			if (rock->_mapPos.x == oriX + offsetX && rock->_mapPos.y == oriY + offsetY)
+			{
+				prock = rock;
+				break;
+			}
+		}
+		auto x = prock->_mapPos.x;
+		auto y = prock->_mapPos.y;
+
+		if (mapStage[y + offsetY][x + offsetX] == MapObject::EMPTY || mapStage[y + offsetY][x + offsetX] == MapObject::GOAL)
+		{
+			pPlayer->PlayerHitAnim();
+			prock->RockMove(pos);
+			prock->RockMoveAnim();
+			prock->_mapPos.x += offsetX;
+			prock->_mapPos.y += offsetY;
+			mapStage[y][x] = MapObject::SPIKE;
+			mapStage[y + offsetY][x + offsetX] = MapObject::ROCK;
+		}
+		else if (mapStage[y + offsetY][x + offsetX] == MapObject::SPIKE)
+		{
+			pPlayer->PlayerHitAnim();
+			prock->RockMove(pos);
+			prock->RockMoveAnim();
+			prock->_mapPos.x += offsetX;
+			prock->_mapPos.y += offsetY;
+			mapStage[y][x] = MapObject::SPIKE;
+			mapStage[y + offsetY][x + offsetX] = MapObject::SPIKEONROCK;
+		}
+		else
+		{
+			pPlayer->PlayerHitAnim();
+		}
+	}
 	else if (mapStage[oriY + offsetY][oriX + offsetX] == MapObject::KEY)
 	{
 		// 캐릭터의 경로에 열쇠가 있을경우 이동해서 열쇠를 얻음.
@@ -491,6 +536,8 @@ void GameManager::onExit()
 
 void GameManager::StageClear()
 {
+	auto pScene = MainCutScene00::createScene();
+	Director::getInstance()->pushScene(pScene);
 }
 
 void GameManager::PlayerDie()

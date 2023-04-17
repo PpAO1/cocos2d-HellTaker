@@ -2,27 +2,14 @@
 
 USING_NS_CC;
 
-Key* Key::_instance = nullptr;
-
 Key::Key()
 {
+	this->init();
 	isGetKey = false;
 }
 
 Key::~Key()
 {
-}
-
-Key& Key::getInstance()
-{
-	_instance = new Key();
-
-	if (_instance && _instance->init())
-		_instance->autorelease();
-	else
-		CC_SAFE_DELETE(_instance);
-
-	return *_instance;
 }
 
 bool Key::init()

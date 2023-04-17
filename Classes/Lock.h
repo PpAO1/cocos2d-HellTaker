@@ -3,14 +3,11 @@
 
 class Lock : public cocos2d::Layer
 {
-private:
+public:
 	Lock();
 	~Lock();
-	static Lock* _instance;
 
-public:
 	cocos2d::Sprite* pLock;
-	static Lock& getInstance();
 	virtual bool init();
 	void UnLock();
 };
