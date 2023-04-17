@@ -16,7 +16,7 @@ public:
 
 	void SkeletonIdleAnim(float f);
 	void SkeletonDamagedAnim();
-	void SkeletonDieAnim();
+	void SkeletonDieAnim(cocos2d::Vec2 pos);
 
 	Coordinate _mapPos;
 	void SkeletonMove(cocos2d::Vec2 pos);

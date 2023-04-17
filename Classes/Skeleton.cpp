@@ -122,11 +122,10 @@ void Skeleton::SkeletonDamagedAnim()
 	//----------------------------------------------------------------
 }
 
-void Skeleton::SkeletonDieAnim()
+void Skeleton::SkeletonDieAnim(cocos2d::Vec2 pos)
 {
-	pSkeleton->setOpacity(0);
 	auto damagedEffect = Sprite::create("Sprite/small_vfx0015.png");
-	damagedEffect->setPosition(pSkeleton->getPosition());
+	damagedEffect->setPosition(pSkeleton->getPosition()+ pos);
 	damagedEffect->setZOrder(1);
 	this->addChild(damagedEffect);
 
@@ -149,13 +148,16 @@ void Skeleton::SkeletonDieAnim()
 	//-----------------------------------------------------------------------------
 
 	auto Born = Sprite::create("Sprite/particle0004.png");
-	Born->setPosition(pSkeleton->getPositionX(), (pSkeleton->getPositionY() - 20));
+	Born->setPosition((pSkeleton->getPositionX() + pos.x), (pSkeleton->getPositionY() - 20 + pos.y));
 	Born->setZOrder(1);
 	this->addChild(Born);
 
+	auto skeletonRemove = Hide::create();
 	auto BornAction = JumpBy::create(0.4f, Vec2(0, 0), 70, 1);
 	auto BornAction2 = Hide::create();
-	Born->runAction(Sequence::create(BornAction, BornAction2, nullptr));
+	auto delay = DelayTime::create(0.2f);
+	Born->runAction(Sequence::create(delay,BornAction, BornAction2, nullptr));
+	pSkeleton->runAction(Sequence::create(delay, skeletonRemove, nullptr));
 }
 
 void Skeleton::SkeletonMove(cocos2d::Vec2 pos)

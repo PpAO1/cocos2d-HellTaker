@@ -26,9 +26,6 @@ enum MapObject
 	GOAL,
 	SPIKEONROCK,
 	SPIKEONPLAYER,
-	MOVESPIKEDOWN,
-	MOVESPIKEUP,
-	MOVESPIKEONROCK
 };
 
 enum Stage
@@ -67,10 +64,11 @@ public:
 	}
 
 	// 해당 객체 += 연산자로 접근 가능하도록 함
-	Coordinate operator+= (Coordinate obj)
+	Coordinate operator-= (Coordinate obj)
 	{
-		this->x = this->x + obj.x;
-		this->y = this->y + obj.y;
+		this->x = this->x - obj.x;
+
+		this->y = this->y - obj.y;
 
 		return *this;
 	}

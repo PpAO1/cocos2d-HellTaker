@@ -19,20 +19,6 @@ Spike::Spike(int objNum)
 
 		this->init();
 	}
-	else if (objNum == MapObject::MOVESPIKEUP)
-	{
-		isMove = true;
-		isUp = true;
-
-		this->init();
-	}
-	else if (objNum == MapObject::MOVESPIKEDOWN)
-	{
-		isMove = true;
-		isUp = false;
-
-		this->init();
-	}
 }
 
 bool Spike::init()

@@ -44,7 +44,8 @@ public:
 
 	std::vector<Skeleton*> skeletonVec;
 	std::vector<Rock*> rockVec;
-	std::vector<Spike*> spikeVec;
+
+	Coordinate origin;
 
 	static GameManager& getInstance(int index);
 	static void ReleaseInstance();
@@ -58,6 +59,8 @@ public:
 	template <typename T>
 	void SetObjects(T node, int j, int i);
 	void Logic(int offsetX, int offsetY, int oriX, int oriY, cocos2d::Vec2 pos);
+	void Damaged(float f);
+	void Died(float f);
 
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
@@ -65,8 +68,7 @@ public:
 	void onExit();
 	
 	void StageClear();
-	void PlayerDie(float f);
-	void update(float f);
+	void PlayerDie();
 };
 
 template<typename T>
