@@ -20,7 +20,9 @@ bool MainCutScene00::init()
 	
 	index = 0;
 
-	auto wlayer = LayerColor::create(Color4B::BLACK);
+	auto wlayer = LayerColor::create(Color4B(2, 2, 27, 255));
+	wlayer->setPosition(Vec2(0, 0));
+	wlayer->setAnchorPoint(Vec2(0, 0));
 	this->addChild(wlayer);
 
 	TTFConfig ttfconfig("Font/The_Jamsil_3_Regular.ttf", 30);
@@ -31,6 +33,12 @@ bool MainCutScene00::init()
 	main->setAnchorPoint(Vec2(0, 0));
 	main->setZOrder(2);
 	this->addChild(main);
+
+	npc = Sprite::create("Sprite/mod_idle.png");
+	npc->setPosition(960, 720);
+	npc->setAnchorPoint(Vec2(0.5f, 0.5f));
+	npc->setZOrder(3);
+	this->addChild(npc);
 
 	button = Sprite::create("Sprite/booper001.png");
 	button->setColor(Color3B(255, 102, 102));
@@ -48,6 +56,7 @@ bool MainCutScene00::init()
 	this->addChild(textLabel);
 
 	this->ButtonAnim();
+	this->scheduleUpdate();
 
 	return true;
 }
@@ -111,5 +120,70 @@ void MainCutScene00::onExit()
 
 void MainCutScene00::update(float f)
 {
+	if(index == 0)
+		scheduleOnce(schedule_selector(MainCutScene00::Enter0), 0.01f);
+	else if(index == 1)
+		scheduleOnce(schedule_selector(MainCutScene00::Enter1), 0.01f);
+	else if(index == 2)
+		scheduleOnce(schedule_selector(MainCutScene00::Enter2), 0.5f);
+}
 
+void MainCutScene00::Enter0(float f)
+{
+	TTFConfig ttfconfig("Font/The_Jamsil_3_Regular.ttf", 30);
+
+	button->setOpacity(0);
+	menu = Sprite::create("Sprite/button0003.png");
+	menu->setPosition(960, -150);
+	menu->setColor(Color3B(255, 102, 102));
+	this->addChild(menu);
+
+	menuLabel = Label::createWithTTF(ttfconfig, "그럴 시간 없어. 여자들 모으느라 바빠", TextHAlignment::CENTER);
+	menuLabel->setPosition(menu->getPosition());
+	this->addChild(menuLabel);
+
+	auto moveaction = MoveBy::create(0.25f, Vec2(0, 300));
+	auto moveaction2 = MoveBy::create(0.25f, Vec2(0, 300));
+	menu->runAction(moveaction);
+	menuLabel->runAction(moveaction2);
+}
+
+void MainCutScene00::Enter1(float f)
+{
+	textLabel->setString("악마 하렘? 가여워라... 다들 네 영혼을 찢으려 들텐데, 이건 '꼭' 봐야겠다.");
+	menu->setOpacity(0);
+	menuLabel->setOpacity(0);
+
+	npc2 = Sprite::create("Sprite/mod_close.png");
+	npc2->setPosition(960, 720);
+	npc2->setAnchorPoint(Vec2(0.5f, 0.5f));
+	npc2->setZOrder(3);
+	this->addChild(npc2);
+
+	auto success = Sprite::create("Sprite/success0001.png");
+	success->setPosition(960, 150);
+	success->setZOrder(1);
+	this->addChild(success);
+
+	auto successAnim = Animation::create();
+
+	successAnim->setDelayPerUnit(0.1f);
+
+	char str[100] = { 0, };
+
+	for (int i = 1; i < 9; i++)
+	{
+		sprintf(str, "Sprite/success000%d.png", i);
+		successAnim->addSpriteFrameWithFile(str);
+	}
+
+	auto successAnimation = Animate::create(successAnim);
+	success->runAction(successAnimation);
+}
+
+void MainCutScene00::Enter2(float f)
+{
+	_director->getTextureCache()->
+		removeUnusedTextures();
+	Director::getInstance()->popScene();
 }

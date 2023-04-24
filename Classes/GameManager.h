@@ -35,6 +35,7 @@ public:
 
 	bool isRestart;
 	bool pressF;
+	bool isClear;
 
 	cocos2d::Vec2 stage1StartPos;
 
@@ -68,7 +69,7 @@ public:
 	void onEnter();
 	void onExit();
 	
-	void StageClear();
+	void StageClear(float f);
 	void PlayerDie();
 };
 

@@ -50,6 +50,7 @@ bool GameManager::init()
 
 	isRestart = false;
 	pressF = false;
+	isClear = false;
 
 	this->FileDataRead();
 	return true;
@@ -442,7 +443,10 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 	{
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
-		this->StageClear();
+		scheduleOnce(schedule_selector(GameManager::StageClear), 0.4f);
+		isClear = true;
+		scheduleOnce(schedule_selector(Player::PlayerClearAnim1), 0.4f);
+		scheduleOnce(schedule_selector(Player::PlayerClearAnim2), 2.2f);
 	}
 
 	if (mapStage[pPlayer->_mapPos.y][pPlayer->_mapPos.x] == MapObject::SPIKEONPLAYER)
@@ -471,27 +475,30 @@ void GameManager::Damaged(float f)
 
 void GameManager::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event)
 {
-	switch (keycode)
+	if (isClear == false)
 	{
-	case EventKeyboard::KeyCode::KEY_R:
-		pressF = true;
-		break;
+		switch (keycode)
+		{
+		case EventKeyboard::KeyCode::KEY_R:
+			pressF = true;
+			break;
 
-	case EventKeyboard::KeyCode::KEY_UP_ARROW:
-		this->Logic(0, 1, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(0, 100));
-		break;
+		case EventKeyboard::KeyCode::KEY_UP_ARROW:
+			this->Logic(0, 1, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(0, 100));
+			break;
 
-	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		this->Logic(0, -1, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(0, -100));
-		break;
+		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+			this->Logic(0, -1, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(0, -100));
+			break;
 
-	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-		this->Logic(-1, 0, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(-100, 0));
-		break;
+		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+			this->Logic(-1, 0, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(-100, 0));
+			break;
 
-	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-		this->Logic(1, 0, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(100, 0));
-		break;
+		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+			this->Logic(1, 0, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(100, 0));
+			break;
+		}
 	}
 }
 
@@ -534,7 +541,7 @@ void GameManager::onExit()
 	Layer::onExit();
 }
 
-void GameManager::StageClear()
+void GameManager::StageClear(float f)
 {
 	auto pScene = MainCutScene00::createScene();
 	Director::getInstance()->pushScene(pScene);

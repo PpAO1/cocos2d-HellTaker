@@ -156,6 +156,47 @@ void Player::PlayerMove(cocos2d::Vec2 pos)
 	pPlayer->runAction(playermove);
 }
 
+void Player::PlayerClearAnim1(float f)
+{
+	/*pPlayer->stopAllActions();*/
+
+	auto animation = Animation::create();
+
+	animation->setDelayPerUnit(0.15f);
+
+	char str[100] = { 0, };
+
+	for (int i = 59; i < 71; i++)
+	{
+		sprintf(str, "Sprite/hero00%d.png", i);
+		animation->addSpriteFrameWithFile(str);
+	}
+
+	auto animate = Animate::create(animation);
+	pPlayer->runAction(animate);
+}
+
+void Player::PlayerClearAnim2(float f)
+{
+	/*pPlayer->stopAllActions();*/
+
+	auto animation = Animation::create();
+
+	animation->setDelayPerUnit(0.07f);
+
+	char str[100] = { 0, };
+
+	for (int i = 71; i < 78; i++)
+	{
+		sprintf(str, "Sprite/hero00%d.png", i);
+		animation->addSpriteFrameWithFile(str);
+	}
+
+	auto animate = Animate::create(animation);
+	auto rep = RepeatForever::create(animate);
+	pPlayer->runAction(rep);
+}
+
 void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event)
 {
 	switch (keycode)
