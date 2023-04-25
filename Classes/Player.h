@@ -31,4 +31,5 @@ public:
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
 	void onEnter();
 	void onExit();
+	void GOAL();
 };

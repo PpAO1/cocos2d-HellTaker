@@ -11,7 +11,6 @@
 #include "Npc.h"
 
 
-
 class GameManager : public cocos2d::Layer
 {
 private:

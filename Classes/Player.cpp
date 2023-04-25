@@ -158,7 +158,7 @@ void Player::PlayerMove(cocos2d::Vec2 pos)
 
 void Player::PlayerClearAnim1(float f)
 {
-	/*pPlayer->stopAllActions();*/
+	pPlayer->stopAllActions();
 
 	auto animation = Animation::create();
 
@@ -173,12 +173,13 @@ void Player::PlayerClearAnim1(float f)
 	}
 
 	auto animate = Animate::create(animation);
+
 	pPlayer->runAction(animate);
 }
 
 void Player::PlayerClearAnim2(float f)
 {
-	/*pPlayer->stopAllActions();*/
+	pPlayer->stopAllActions();
 
 	auto animation = Animation::create();
 
@@ -194,6 +195,7 @@ void Player::PlayerClearAnim2(float f)
 
 	auto animate = Animate::create(animation);
 	auto rep = RepeatForever::create(animate);
+
 	pPlayer->runAction(rep);
 }
 
@@ -257,4 +259,10 @@ void Player::onExit()
 {
 	_eventDispatcher->removeEventListener(_listener);
 	Layer::onExit();
+}
+
+void Player::GOAL() 
+{
+	scheduleOnce(schedule_selector(Player::PlayerClearAnim1), 0.4f);
+	scheduleOnce(schedule_selector(Player::PlayerClearAnim2), 2.2f);
 }

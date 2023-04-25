@@ -41,7 +41,7 @@ void GameManager::ReleaseInstance()
 
 bool GameManager::init()
 {
-	 ui = &UI::getInstance();
+	ui = &UI::getInstance();
 
 	ui->setPosition(Vec2(0, 0));
 	ui->setAnchorPoint(Vec2(0, 0));
@@ -89,7 +89,7 @@ void GameManager::FileDataRead()
 	}
 }
 
-void GameManager::TextFileRead(std::string str, int width,int height)
+void GameManager::TextFileRead(std::string str, int width, int height)
 {
 	ifstream readFile;
 	readFile.open(str);
@@ -102,15 +102,15 @@ void GameManager::TextFileRead(std::string str, int width,int height)
 	{
 		int i = 0, j = 0;
 		char temp = ' ';
-	/*	
-		std::vector<int> v;
-		mapStage.push_back(v);
-		mapStage.push_back(v);
-		mapStage.push_back(v);
-		mapStage.push_back(v);
-		mapStage.push_back(v);
-		mapStage.push_back(v);
-		mapStage.push_back(v);*/
+		/*
+			std::vector<int> v;
+			mapStage.push_back(v);
+			mapStage.push_back(v);
+			mapStage.push_back(v);
+			mapStage.push_back(v);
+			mapStage.push_back(v);
+			mapStage.push_back(v);
+			mapStage.push_back(v);*/
 
 		while (!readFile.eof())
 		{
@@ -146,7 +146,7 @@ void GameManager::TextFileRead(std::string str, int width,int height)
 			{
 				j = 0;
 				i++;
-				if (i == height) 
+				if (i == height)
 				{
 					break;
 				}
@@ -307,7 +307,7 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 			mapStage[y + offsetY][x + offsetX] = MapObject::SKELETON;
 		}
 		else if (mapStage[y + offsetY][x + offsetX] == MapObject::SPIKE)
-		{	
+		{
 			pPlayer->PlayerHitAnim();
 			pskeleton->SkeletonDamagedAnim();
 			pskeleton->SkeletonMove(pos);
@@ -319,7 +319,7 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		else
 		{
 			pPlayer->PlayerHitAnim();
-			pskeleton->SkeletonDieAnim(Vec2(0,0));
+			pskeleton->SkeletonDieAnim(Vec2(0, 0));
 			mapStage[y][x] = MapObject::EMPTY;
 		}
 	}
@@ -366,7 +366,7 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 		}
 	}
 	else if (mapStage[oriY + offsetY][oriX + offsetX] == MapObject::SPIKE)
-	{	
+	{
 		// 캐릭터의 경로에 움직이지 않는가시가 있을경우 피해를 입음.
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
@@ -443,10 +443,10 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 	{
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
-		scheduleOnce(schedule_selector(GameManager::StageClear), 0.4f);
 		isClear = true;
-		scheduleOnce(schedule_selector(Player::PlayerClearAnim1), 0.4f);
-		scheduleOnce(schedule_selector(Player::PlayerClearAnim2), 2.2f);
+		scheduleOnce(schedule_selector(GameManager::StageClear), 0.4f);
+
+		
 	}
 
 	if (mapStage[pPlayer->_mapPos.y][pPlayer->_mapPos.x] == MapObject::SPIKEONPLAYER)
@@ -545,21 +545,22 @@ void GameManager::StageClear(float f)
 {
 	auto pScene = MainCutScene00::createScene();
 	Director::getInstance()->pushScene(pScene);
+	pPlayer->GOAL();
 }
 
 void GameManager::PlayerDie()
 {
-	
-	auto wlayer = LayerColor::create(Color4B(2,2,27,255));
+
+	auto wlayer = LayerColor::create(Color4B(2, 2, 27, 255));
 	wlayer->setPosition(Vec2(0, 0));
 	wlayer->setAnchorPoint(Vec2(0, 0));
 	wlayer->setZOrder(6);
 	this->addChild(wlayer);
 
 	pPlayer->setOpacity(0);
-	
-	int x = (pPlayer->_mapPos.x - origin.x ) * 100;
-	int y = (pPlayer->_mapPos.y - origin.y ) * 100;
+
+	int x = (pPlayer->_mapPos.x - origin.x) * 100;
+	int y = (pPlayer->_mapPos.y - origin.y) * 100;
 	auto tempPos = pPlayer->getPosition();
 
 	tempPos.x += x;
@@ -568,7 +569,7 @@ void GameManager::PlayerDie()
 
 	auto damagedEffect = Sprite::create("Sprite/death_P1.png");
 	damagedEffect->setAnchorPoint(Vec2(0.5f, 0.5f));
-	damagedEffect->setPosition(tempPos); // 플레이어의 위치를 못 불러옴..; 이상함 이거
+	damagedEffect->setPosition(tempPos);
 	damagedEffect->setZOrder(7);
 	this->addChild(damagedEffect);
 

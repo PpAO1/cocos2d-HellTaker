@@ -8,6 +8,7 @@ USING_NS_CC;
 
 Scene* MainCutScene00::createScene()
 {
+
 	return MainCutScene00::create();
 }
 
@@ -17,7 +18,8 @@ bool MainCutScene00::init()
 	{
 		return false;
 	}
-	
+	isEnd = false;
+
 	index = 0;
 
 	auto wlayer = LayerColor::create(Color4B(2, 2, 27, 255));
@@ -120,11 +122,11 @@ void MainCutScene00::onExit()
 
 void MainCutScene00::update(float f)
 {
-	if(index == 0)
+	if (index == 0)
 		scheduleOnce(schedule_selector(MainCutScene00::Enter0), 0.01f);
-	else if(index == 1)
+	else if (index == 1)
 		scheduleOnce(schedule_selector(MainCutScene00::Enter1), 0.01f);
-	else if(index == 2)
+	else if (index == 2)
 		scheduleOnce(schedule_selector(MainCutScene00::Enter2), 0.5f);
 }
 
@@ -185,5 +187,7 @@ void MainCutScene00::Enter2(float f)
 {
 	_director->getTextureCache()->
 		removeUnusedTextures();
+	isEnd = true;
+
 	Director::getInstance()->popScene();
 }
