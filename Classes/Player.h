@@ -26,6 +26,7 @@ public:
 	void PlayerMove(cocos2d::Vec2 pos);
 	void PlayerClearAnim1(float f);
 	void PlayerClearAnim2(float f);
+	void PlayerClearAnim3(float f);
 
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);

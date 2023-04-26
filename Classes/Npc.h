@@ -13,4 +13,7 @@ public:
 	virtual bool init();
 	void LoveSignAnim();
 	void Stage1NpcAnim();
+	void StageClearAnim1(float f);
+	void stageClaerAnim2(float f);
+	void NpcGoal();
 };

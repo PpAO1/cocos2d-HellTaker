@@ -18,7 +18,6 @@ bool MainCutScene00::init()
 	{
 		return false;
 	}
-	isEnd = false;
 
 	index = 0;
 
@@ -187,7 +186,6 @@ void MainCutScene00::Enter2(float f)
 {
 	_director->getTextureCache()->
 		removeUnusedTextures();
-	isEnd = true;
 
 	Director::getInstance()->popScene();
 }

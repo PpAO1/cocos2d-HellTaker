@@ -35,6 +35,7 @@ public:
 	bool isRestart;
 	bool pressF;
 	bool isClear;
+	bool isGonextMap;
 
 	cocos2d::Vec2 stage1StartPos;
 
@@ -42,6 +43,7 @@ public:
 	Key* pKey;
 	Lock* pLock;
 	UI* ui;
+	Npc* pNpc;
 
 	std::vector<Skeleton*> skeletonVec;
 	std::vector<Rock*> rockVec;
@@ -70,6 +72,7 @@ public:
 	
 	void StageClear(float f);
 	void PlayerDie();
+	void NextStage(float f);
 };
 
 template<typename T>

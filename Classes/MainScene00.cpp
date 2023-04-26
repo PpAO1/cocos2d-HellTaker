@@ -1,4 +1,5 @@
 #include "MainScene00.h"
+#include "MainScene01.h"
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -41,6 +42,11 @@ bool MainScene00::init()
 
 void MainScene00::SceneEnd(float f)
 {
+	gameLayer->removeAllChildren();
+	gameLayer->removeFromParentAndCleanup(true);
+
+	auto pScene = MainScene01::createScene();
+	Director::getInstance()->replaceScene(pScene);
 }
 
 void MainScene00::update(float f)
@@ -57,6 +63,14 @@ void MainScene00::update(float f)
 	{
 		scheduleOnce(schedule_selector(MainScene00::Restart), 0.01f);
 		gameLayer->pressF = false;
+
+		this->unscheduleUpdate();
+	}
+
+	if (gameLayer->isGonextMap)
+	{
+		scheduleOnce(schedule_selector(MainScene00::SceneEnd), 0.01f);
+		gameLayer->isGonextMap = false;
 
 		this->unscheduleUpdate();
 	}

@@ -183,19 +183,34 @@ void Player::PlayerClearAnim2(float f)
 
 	auto animation = Animation::create();
 
-	animation->setDelayPerUnit(0.07f);
-
+	animation->setDelayPerUnit(0.1f);
+	
 	char str[100] = { 0, };
 
-	for (int i = 71; i < 78; i++)
+	for (int i = 71; i < 76; i++)
 	{
 		sprintf(str, "Sprite/hero00%d.png", i);
 		animation->addSpriteFrameWithFile(str);
 	}
 
 	auto animate = Animate::create(animation);
-	auto rep = RepeatForever::create(animate);
 
+	pPlayer->runAction(animate);
+}
+
+void Player::PlayerClearAnim3(float f)
+{
+	pPlayer->stopAllActions();
+
+	auto animation2 = Animation::create();
+	animation2->setDelayPerUnit(0.2f);
+	/*animation2->addSpriteFrameWithFile("Sprite/hero0075.png");*/
+	animation2->addSpriteFrameWithFile("Sprite/hero0076.png");
+	animation2->addSpriteFrameWithFile("Sprite/hero0077.png");
+
+	auto animate2 = Animate::create(animation2);
+	auto rep = RepeatForever::create(animate2);
+	
 	pPlayer->runAction(rep);
 }
 
@@ -265,4 +280,5 @@ void Player::GOAL()
 {
 	scheduleOnce(schedule_selector(Player::PlayerClearAnim1), 0.4f);
 	scheduleOnce(schedule_selector(Player::PlayerClearAnim2), 2.2f);
+	scheduleOnce(schedule_selector(Player::PlayerClearAnim3), 2.7f);
 }

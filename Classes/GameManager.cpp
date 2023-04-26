@@ -51,6 +51,7 @@ bool GameManager::init()
 	isRestart = false;
 	pressF = false;
 	isClear = false;
+	isGonextMap = false;
 
 	this->FileDataRead();
 	return true;
@@ -231,7 +232,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			}
 			else if (mapStage[i][j] == MapObject::NPC)
 			{
-				auto pNpc = new Npc(index);
+				pNpc = new Npc(index);
 				SetObjects(pNpc, j, i);
 			}
 		}
@@ -546,6 +547,9 @@ void GameManager::StageClear(float f)
 	auto pScene = MainCutScene00::createScene();
 	Director::getInstance()->pushScene(pScene);
 	pPlayer->GOAL();
+	pNpc->NpcGoal();
+
+	scheduleOnce(schedule_selector(GameManager::NextStage), 3.5f);
 }
 
 void GameManager::PlayerDie()
@@ -590,5 +594,10 @@ void GameManager::PlayerDie()
 	damagedEffect->runAction(Sequence::create(EffectAnimate, removeanim, nullptr));
 
 	isRestart = true;
+}
+
+void GameManager::NextStage(float f)
+{
+	isGonextMap = true;
 }
 
