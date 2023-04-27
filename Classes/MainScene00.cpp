@@ -44,6 +44,7 @@ void MainScene00::SceneEnd(float f)
 {
 	gameLayer->removeAllChildren();
 	gameLayer->removeFromParentAndCleanup(true);
+	gameLayer->ReleaseInstance();
 
 	auto pScene = MainScene01::createScene();
 	Director::getInstance()->replaceScene(pScene);
@@ -78,17 +79,6 @@ void MainScene00::update(float f)
 
 void MainScene00::Restart(float f)
 {
-	/*gameLayer->removeAllChildrenWithCleanup(true);
-
-	gameLayer = &GameManager::getInstance();
-	gameLayer->getInstance();
-	gameLayer->setAnchorPoint(Vec2(0, 0));
-	gameLayer->setZOrder(2);
-	gameLayer->init();
-	this->addChild(gameLayer);*/
-
-	/*_director->getTextureCache()->removeUnusedTextures();*/  //<- 렉 걸리게하는 주범! 
-
 	gameLayer->removeAllChildren();
 	gameLayer->removeFromParentAndCleanup(true);
 

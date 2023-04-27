@@ -12,7 +12,7 @@ public:
 	cocos2d::Sprite* pNpc;
 	virtual bool init();
 	void LoveSignAnim();
-	void Stage1NpcAnim();
+	void NpcAnim(const char* str);
 	void StageClearAnim1(float f);
 	void stageClaerAnim2(float f);
 	void NpcGoal();

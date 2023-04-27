@@ -16,13 +16,26 @@ Npc::Npc(int stage)
 	switch (stage)
 	{
 	case 0:
-		pNpc = Sprite::create("Sprite/pandemonica_finalModel0001.png");
+		pNpc = Sprite::create("Sprite/modeus_finalModel0001.png");
 		stageNum = stage;
 		this->init();
 		break;
 	case 1:
+		pNpc = Sprite::create("Sprite/pandemonica_finalModel0001.png");
+		stageNum = stage;
+		this->init();
 		break;
 	case 2:
+		pNpc = Sprite::create("Sprite/cerberus_finalModel0001.png");
+		stageNum = stage;
+		this->init();
+		break;
+	case 3:
+		pNpc = Sprite::create("Sprite/malina_finalModel0001.png");
+		stageNum = stage;
+		this->init();
+		break;
+	default:
 		break;
 	}
 }
@@ -35,11 +48,18 @@ bool Npc::init()
 	switch (stageNum)
 	{
 	case 0:
-		Stage1NpcAnim();
+		NpcAnim("Sprite/modeus_finalModel000%d.png");
 		break;
 	case 1:
+		NpcAnim("Sprite/pandemonica_finalModel000%d.png");
 		break;
 	case 2:
+		NpcAnim("Sprite/cerberus_finalModel000%d.png");
+		break;
+	case 3:
+		NpcAnim("Sprite/malina_finalModel000%d.png");
+		break;
+	default:
 		break;
 	}
 	return true;
@@ -62,18 +82,18 @@ void Npc::LoveSignAnim()
 	loveSign->runAction(rep);
 }
 
-void Npc::Stage1NpcAnim()
+void Npc::NpcAnim(const char* str)
 {
 	auto animation = Animation::create();
 
 	animation->setDelayPerUnit(0.07f);
 
-	char str[100] = { 0, };
+	char str2[100] = { 0, };
 
 	for (int i = 1; i < 13; i++)
 	{
-		sprintf(str, "Sprite/pandemonica_finalModel000%d.png", i);
-		animation->addSpriteFrameWithFile(str);
+		sprintf(str2, str, i);
+		animation->addSpriteFrameWithFile(str2);
 	}
 
 	auto animate = Animate::create(animation);

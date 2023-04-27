@@ -2,7 +2,7 @@
 #include "Prologue.h"
 #include "MainScene00.h"
 #include "MainScene01.h"
-//#include "MainScene02.h"
+#include "MainScene02.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #pragma execution_character_set("utf-8");
@@ -296,13 +296,13 @@ void Prologue2::GameStart(float f)
 		this->removeAllChildrenWithCleanup(true);
 		Director::getInstance()->replaceScene(pScene);
 	}
-	/*else if (chapterOrder == 2)
+	else if (chapterOrder == 2)
 	{
 		auto pScene = MainScene02::create();
 		_director->getTextureCache()->removeUnusedTextures();
 		this->removeAllChildrenWithCleanup(true);
 		Director::getInstance()->replaceScene(pScene);
-	}*/
+	}
 }
 
 void Prologue2::SetMenu()

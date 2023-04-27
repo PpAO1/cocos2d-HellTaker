@@ -4,28 +4,42 @@
 
 #define STAGE1_WIDTH 8
 #define STAGE1_HEIGHT 9
+
 #define STAGE2_WIDTH 8
 #define STAGE2_HEIGHT 9
-#define STAGE1_START_POS_X 560
-#define STAGE1_START_POS_Y 210
+
+#define STAGE3_HEIGHT 10
+#define STAGE3_WIDTH 9
+
+#define STAGE4_HEIGHT 10
+#define STAGE4_WIDTH 7
+
+#define STAGE1_2_START_POS_X 560
+#define STAGE1_2_START_POS_Y 210
+
+#define STAGE3_START_POS_X 510
+#define STAGE3_START_POS_Y 130
+
+#define STAGE4_START_POS_X 510
+#define STAGE4_START_POS_Y 130
 
 #define CELL 100
 
 
 enum MapObject
 {
-	EMPTY,
-	PLAYER,
-	SKELETON,
-	SPIKE,
-	WALL,
-	ROCK,
-	LOCK,
-	KEY,
-	NPC,
-	GOAL,
-	SPIKEONROCK,
-	SPIKEONPLAYER,
+	EMPTY = 0,
+	PLAYER = 1,
+	SKELETON = 2,
+	SPIKE = 3,
+	WALL = 4,
+	ROCK = 5,
+	LOCK = 6,
+	KEY = 7,
+	NPC = 8,
+	GOAL = 9,
+	SPIKEONROCK = 10,
+	SPIKEONPLAYER = 11,
 };
 
 enum Stage

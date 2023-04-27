@@ -6,7 +6,7 @@
 #pragma execution_character_set("utf-8");
 #endif
 
-class MainScene02 : public cocos2d::Scene
+class MainScene03 : public cocos2d::Scene
 {
 private:
 
@@ -15,7 +15,7 @@ public:
 
 	virtual bool init();
 
-	CREATE_FUNC(MainScene02);
+	CREATE_FUNC(MainScene03);
 
 	GameManager* gameLayer;
 

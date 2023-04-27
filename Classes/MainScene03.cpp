@@ -1,5 +1,4 @@
-#include "MainScene01.h"
-#include "MainScene02.h"
+#include "MainScene03.h"
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -8,12 +7,12 @@
 
 USING_NS_CC;
 
-Scene* MainScene01::createScene()
+Scene* MainScene03::createScene()
 {
-	return MainScene01::create();
+	return MainScene03::create();
 }
 
-bool MainScene01::init()
+bool MainScene03::init()
 {
 	if (!Scene::init())
 	{
@@ -23,13 +22,13 @@ bool MainScene01::init()
 	auto wlayer = LayerColor::create(Color4B::BLACK);
 	this->addChild(wlayer);
 
-	gameLayer = &GameManager::getInstance(1);
+	gameLayer = &GameManager::getInstance(3);
 	gameLayer->setAnchorPoint(Vec2(0, 0));
 	gameLayer->setZOrder(2);
 	gameLayer->init();
 	this->addChild(gameLayer);
 
-	main = Sprite::create("Sprite/chapterBG0002.png");
+	main = Sprite::create("Sprite/chapterBG0004.png");
 	main->setAnchorPoint(Vec2(0, 0));
 	main->setPosition(0, 0);
 	main->setZOrder(1);
@@ -40,21 +39,21 @@ bool MainScene01::init()
 	return true;
 }
 
-void MainScene01::SceneEnd(float f)
+void MainScene03::SceneEnd(float f)
 {
 	gameLayer->removeAllChildren();
 	gameLayer->removeFromParentAndCleanup(true);
 	gameLayer->ReleaseInstance();
 
-	auto pScene = MainScene02::createScene();
+	auto pScene = MainScene03::createScene();
 	Director::getInstance()->replaceScene(pScene);
 }
 
-void MainScene01::update(float f)
+void MainScene03::update(float f)
 {
 	if (gameLayer->isRestart)
 	{
-		scheduleOnce(schedule_selector(MainScene01::Restart), 1.8f);
+		scheduleOnce(schedule_selector(MainScene03::Restart), 1.8f);
 		gameLayer->isRestart = false;
 
 		this->unscheduleUpdate();
@@ -62,7 +61,7 @@ void MainScene01::update(float f)
 
 	if (gameLayer->pressF)
 	{
-		scheduleOnce(schedule_selector(MainScene01::Restart), 0.01f);
+		scheduleOnce(schedule_selector(MainScene03::Restart), 0.01f);
 		gameLayer->pressF = false;
 
 		this->unscheduleUpdate();
@@ -70,29 +69,18 @@ void MainScene01::update(float f)
 
 	if (gameLayer->isGonextMap)
 	{
-		scheduleOnce(schedule_selector(MainScene01::SceneEnd), 0.01f);
+		scheduleOnce(schedule_selector(MainScene03::SceneEnd), 0.01f);
 		gameLayer->isGonextMap = false;
 
 		this->unscheduleUpdate();
 	}
 }
 
-void MainScene01::Restart(float f)
+void MainScene03::Restart(float f)
 {
-	/*gameLayer->removeAllChildrenWithCleanup(true);
-
-	gameLayer = &GameManager::getInstance();
-	gameLayer->getInstance();
-	gameLayer->setAnchorPoint(Vec2(0, 0));
-	gameLayer->setZOrder(2);
-	gameLayer->init();
-	this->addChild(gameLayer);*/
-
-	/*_director->getTextureCache()->removeUnusedTextures();*/  //<- 렉 걸리게하는 주범! 
-
 	gameLayer->removeAllChildren();
 	gameLayer->removeFromParentAndCleanup(true);
 
-	auto pScene = MainScene01::createScene();
+	auto pScene = MainScene03::createScene();
 	Director::getInstance()->replaceScene(pScene);
 }

@@ -56,14 +56,13 @@ public:
 	virtual bool init();
 	void FileDataRead();
 	void TextFileRead(std::string str, int width, int height);
-	void SetPlayerPos(int stageHeight, int stageWidth);
+	void SetPlayerPos(int stageHeight, int stageWidth, int startx, int starty);
 	void SetObjectsPos(int stageHeight, int stageWidth);
 
 	template <typename T>
-	void SetObjects(T node, int j, int i);
+	void SetObjects(T node, int j, int i, int startx, int starty);
 	void Logic(int offsetX, int offsetY, int oriX, int oriY, cocos2d::Vec2 pos);
 	void Damaged(float f);
-	void Died(float f);
 
 	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
 	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
@@ -76,9 +75,9 @@ public:
 };
 
 template<typename T>
-inline void GameManager::SetObjects(T node, int j, int i)
+inline void GameManager::SetObjects(T node, int j, int i, int startx, int starty)
 {
-	node->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
+	node->setPosition((startx + (j * CELL)), (starty + (i * CELL)));
 	node->setAnchorPoint(Vec2(0, 0));
 	node->setZOrder(3);
 	this->addChild(node);

@@ -37,6 +37,7 @@ GameManager& GameManager::getInstance(int index)
 void GameManager::ReleaseInstance()
 {
 	delete(_instance);
+	_instance = NULL;
 }
 
 bool GameManager::init()
@@ -69,7 +70,7 @@ void GameManager::FileDataRead()
 	{
 	case 0:
 		TextFileRead("stage1.txt", STAGE1_HEIGHT, STAGE1_WIDTH);
-		SetPlayerPos(STAGE1_WIDTH, STAGE1_HEIGHT);
+		SetPlayerPos(STAGE1_WIDTH, STAGE1_HEIGHT, STAGE1_2_START_POS_X, STAGE1_2_START_POS_Y);
 		SetObjectsPos(STAGE1_WIDTH, STAGE1_HEIGHT);
 		MoveChance = 23;
 		ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
@@ -77,13 +78,27 @@ void GameManager::FileDataRead()
 		break;
 	case 1:
 		TextFileRead("stage2.txt", STAGE2_HEIGHT, STAGE2_WIDTH);
-		SetPlayerPos(STAGE2_WIDTH, STAGE2_HEIGHT);
+		SetPlayerPos(STAGE2_WIDTH, STAGE2_HEIGHT, STAGE1_2_START_POS_X, STAGE1_2_START_POS_Y);
 		SetObjectsPos(STAGE2_WIDTH, STAGE2_HEIGHT);
-		MoveChance = 30;
+		MoveChance = 24;
 		ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
 		ui->stageCountLabel->setString("¥±");
 		break;
 	case 2:
+		TextFileRead("stage3.txt", STAGE3_HEIGHT, STAGE3_WIDTH);
+		SetPlayerPos(STAGE3_WIDTH, STAGE3_HEIGHT, STAGE3_START_POS_X, STAGE3_START_POS_Y);
+		SetObjectsPos(STAGE3_WIDTH, STAGE3_HEIGHT);
+		MoveChance = 32;
+		ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
+		ui->stageCountLabel->setString("¥²");
+		break;
+	case 3:
+		TextFileRead("stage4.txt", STAGE4_HEIGHT, STAGE4_WIDTH);
+		SetPlayerPos(STAGE4_WIDTH, STAGE4_HEIGHT, STAGE4_START_POS_X, STAGE4_START_POS_Y);
+		SetObjectsPos(STAGE4_WIDTH, STAGE4_HEIGHT);
+		MoveChance = 23;
+		ui->moveChanceLabel->setString(StringUtils::format("%d", MoveChance));
+		ui->stageCountLabel->setString("¥³");
 		break;
 	default:
 		break;
@@ -156,7 +171,7 @@ void GameManager::TextFileRead(std::string str, int width, int height)
 	}
 }
 
-void GameManager::SetPlayerPos(int stageHeight, int stageWidth)
+void GameManager::SetPlayerPos(int stageHeight, int stageWidth, int startx, int starty)
 {
 	for (int i = 0; i < stageHeight; i++)
 	{
@@ -165,7 +180,7 @@ void GameManager::SetPlayerPos(int stageHeight, int stageWidth)
 			if (mapStage[i][j] == MapObject::PLAYER)
 			{
 				pPlayer = &Player::getInstance();
-				pPlayer->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
+				pPlayer->setPosition((startx + (j * CELL)), (starty + (i * CELL)));
 				pPlayer->_mapPos = Coordinate(j, i);
 				origin = Coordinate(j, i);
 				pPlayer->setAnchorPoint(Vec2(0, 0));
@@ -178,6 +193,30 @@ void GameManager::SetPlayerPos(int stageHeight, int stageWidth)
 
 void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 {
+	int startX, startY = 0;
+
+	switch (index)
+	{
+	case 0:
+		startX = STAGE1_2_START_POS_X;
+		startY = STAGE1_2_START_POS_Y;
+		break;
+	case 1:
+		startX = STAGE1_2_START_POS_X;
+		startY = STAGE1_2_START_POS_Y;
+		break;
+	case 2:
+		startX = STAGE3_START_POS_X;
+		startY = STAGE3_START_POS_Y;
+		break;
+	case 3:
+		startX = STAGE4_START_POS_X;
+		startY = STAGE4_START_POS_Y;
+		break;
+	default:
+		break;
+	}
+
 	for (int i = 0; i < stageHeight; i++)
 	{
 		for (int j = 0; j < stageWidth; j++)
@@ -188,7 +227,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			if (mapStage[i][j] == MapObject::SKELETON)
 			{
 				auto pSkeleton = &Skeleton::getInstance();
-				SetObjects(pSkeleton, j, i);
+				SetObjects(pSkeleton, j, i,startX,startY);
 				pSkeleton->_mapPos = Coordinate(j, i);
 				skeletonVec.push_back(pSkeleton);
 				//pSkeleton->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
@@ -199,7 +238,7 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			else if (mapStage[i][j] == MapObject::ROCK)
 			{
 				auto pRock = &Rock::getInctance();
-				SetObjects(pRock, j, i);
+				SetObjects(pRock, j, i, startX, startY);
 				pRock->setZOrder(4);
 				pRock->_mapPos = Coordinate(j, i);
 				rockVec.push_back(pRock);
@@ -207,15 +246,15 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			else if (mapStage[i][j] == MapObject::SPIKE)
 			{
 				auto pSpike = new Spike(MapObject::SPIKE);
-				SetObjects(pSpike, j, i);
+				SetObjects(pSpike, j, i, startX, startY);
 			}
 			else if (mapStage[i][j] == MapObject::SPIKEONROCK)
 			{
 				auto pSpike = new Spike(MapObject::SPIKE);
-				SetObjects(pSpike, j, i);
+				SetObjects(pSpike, j, i, startX, startY);
 
 				auto pRock = &Rock::getInctance();
-				SetObjects(pRock, j, i);
+				SetObjects(pRock, j, i, startX, startY);
 				pRock->setZOrder(4);
 				pRock->_mapPos = Coordinate(j, i);
 				rockVec.push_back(pRock);
@@ -223,17 +262,17 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			else if (mapStage[i][j] == MapObject::KEY)
 			{
 				auto pKey = new Key;
-				SetObjects(pKey, j, i);
+				SetObjects(pKey, j, i, startX, startY);
 			}
 			else if (mapStage[i][j] == MapObject::LOCK)
 			{
 				auto pLock = new Lock;
-				SetObjects(pLock, j, i);
+				SetObjects(pLock, j, i, startX, startY);
 			}
 			else if (mapStage[i][j] == MapObject::NPC)
 			{
 				pNpc = new Npc(index);
-				SetObjects(pNpc, j, i);
+				SetObjects(pNpc, j, i, startX, startY);
 			}
 		}
 	}
