@@ -43,8 +43,8 @@ public:
 	Key* pKey;
 	Lock* pLock;
 	UI* ui;
-	Npc* pNpc;
 
+	std::vector<Npc*> npcVec;
 	std::vector<Skeleton*> skeletonVec;
 	std::vector<Rock*> rockVec;
 

@@ -14,8 +14,28 @@ public:
 
 	CREATE_FUNC(MainCutScene01);
 
-	cocos2d::Sprite* main;
-	cocos2d::Label* plabel;
+	int index;
 
-	void SceneEnd(float f);
+	cocos2d::EventListenerKeyboard* _listener;
+
+	cocos2d::Sprite* main;
+	cocos2d::Sprite* button;
+	cocos2d::Sprite* npc;
+	cocos2d::Sprite* npc2;
+	cocos2d::Label* nameLabel;
+	cocos2d::Label* textLabel;
+	cocos2d::Sprite* menu;
+	cocos2d::Label* menuLabel;
+
+	void ButtonAnim();
+
+	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
+	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
+	void onEnter();
+	void onExit();
+
+	void update(float f);
+	void Enter0(float f);
+	void Enter1(float f);
+	void Enter2(float f);
 };

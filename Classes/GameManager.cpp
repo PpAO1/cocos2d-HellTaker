@@ -1,5 +1,8 @@
 #include "GameManager.h"
 #include "MainCutScene00.h"
+#include "MainCutScene01.h"
+#include "MainCutScene02.h"
+#include "MainCutScene03.h"
 
 USING_NS_CC;
 using namespace std;
@@ -261,18 +264,19 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 			}
 			else if (mapStage[i][j] == MapObject::KEY)
 			{
-				auto pKey = new Key;
+				pKey = new Key;
 				SetObjects(pKey, j, i, startX, startY);
 			}
 			else if (mapStage[i][j] == MapObject::LOCK)
 			{
-				auto pLock = new Lock;
+				pLock = new Lock;
 				SetObjects(pLock, j, i, startX, startY);
 			}
 			else if (mapStage[i][j] == MapObject::NPC)
 			{
-				pNpc = new Npc(index);
+				auto pNpc = new Npc(index);
 				SetObjects(pNpc, j, i, startX, startY);
+				npcVec.push_back(pNpc);
 			}
 		}
 	}
@@ -583,10 +587,33 @@ void GameManager::onExit()
 
 void GameManager::StageClear(float f)
 {
-	auto pScene = MainCutScene00::createScene();
-	Director::getInstance()->pushScene(pScene);
+	if (index == 0)
+	{
+		auto pScene = MainCutScene00::createScene();
+		Director::getInstance()->pushScene(pScene);
+	}
+	else if (index == 1)
+	{
+		auto pScene = MainCutScene01::createScene();
+		Director::getInstance()->pushScene(pScene);
+	}
+	else if (index == 2)
+	{
+		auto pScene = MainCutScene02::createScene();
+		Director::getInstance()->pushScene(pScene);
+	}
+	else if (index == 3)
+	{
+		auto pScene = MainCutScene03::createScene();
+		Director::getInstance()->pushScene(pScene);
+	}
+
 	pPlayer->GOAL();
-	pNpc->NpcGoal();
+
+	for (int i = 0; i < npcVec.size(); i++)
+	{
+		npcVec[i]->NpcGoal();
+	}
 
 	scheduleOnce(schedule_selector(GameManager::NextStage), 3.5f);
 }

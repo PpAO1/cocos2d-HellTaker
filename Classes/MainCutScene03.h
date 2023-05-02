@@ -5,14 +5,14 @@
 #pragma execution_character_set("utf-8");
 #endif
 
-class MainCutScene02 : public cocos2d::Scene
+class MainCutScene03 : public cocos2d::Scene
 {
 public:
 	static cocos2d::Scene* createScene();
 
 	virtual bool init();
 
-	CREATE_FUNC(MainCutScene02);
+	CREATE_FUNC(MainCutScene03);
 
 	int index;
 
