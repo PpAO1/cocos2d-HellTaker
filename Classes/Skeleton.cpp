@@ -155,17 +155,12 @@ void Skeleton::SkeletonDieAnim(cocos2d::Vec2 pos)
 	auto skeletonRemove = Hide::create();
 	auto BornAction = JumpBy::create(0.4f, Vec2(0, 0), 70, 1);
 	auto BornAction2 = Hide::create();
-	auto delay = DelayTime::create(0.2f);
-	Born->runAction(Sequence::create(delay,BornAction, BornAction2, nullptr));
-	pSkeleton->runAction(Sequence::create(delay, skeletonRemove, nullptr));
+	Born->runAction(Sequence::create(BornAction, BornAction2, nullptr));
+	pSkeleton->runAction(skeletonRemove);
 }
 
 void Skeleton::SkeletonMove(cocos2d::Vec2 pos)
 {
 	auto skeletonmove = MoveBy::create(0.15f, pos);
 	pSkeleton->runAction(skeletonmove);
-}
-
-void Skeleton::update(float f)
-{
 }

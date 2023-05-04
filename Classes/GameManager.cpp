@@ -56,6 +56,7 @@ bool GameManager::init()
 	pressF = false;
 	isClear = false;
 	isGonextMap = false;
+	isMove = false;
 
 	this->FileDataRead();
 	return true;
@@ -121,16 +122,7 @@ void GameManager::TextFileRead(std::string str, int width, int height)
 	{
 		int i = 0, j = 0;
 		char temp = ' ';
-		/*
-			std::vector<int> v;
-			mapStage.push_back(v);
-			mapStage.push_back(v);
-			mapStage.push_back(v);
-			mapStage.push_back(v);
-			mapStage.push_back(v);
-			mapStage.push_back(v);
-			mapStage.push_back(v);*/
-
+		
 		while (!readFile.eof())
 		{
 			char nObjNum;
@@ -158,7 +150,6 @@ void GameManager::TextFileRead(std::string str, int width, int height)
 			temp = nObjNum;
 			mapStage[i].push_back(nObjNum - '0');
 
-			//mapStage[i][j] = nObjNum - '0';
 			j++;
 
 			if (j == width)
@@ -224,19 +215,12 @@ void GameManager::SetObjectsPos(int stageHeight, int stageWidth)
 	{
 		for (int j = 0; j < stageWidth; j++)
 		{
-			auto Obj = Sprite::create();
-			string fileName = "null";
-
 			if (mapStage[i][j] == MapObject::SKELETON)
 			{
 				auto pSkeleton = &Skeleton::getInstance();
 				SetObjects(pSkeleton, j, i,startX,startY);
 				pSkeleton->_mapPos = Coordinate(j, i);
 				skeletonVec.push_back(pSkeleton);
-				//pSkeleton->setPosition((STAGE1_START_POS_X + (j * CELL)), (STAGE1_START_POS_Y + (i * CELL)));
-				//pSkeleton->setAnchorPoint(Vec2(0, 0));
-				//pSkeleton->setZOrder(3);
-				//this->addChild(pSkeleton);
 			}
 			else if (mapStage[i][j] == MapObject::ROCK)
 			{
@@ -411,7 +395,7 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 	}
 	else if (mapStage[oriY + offsetY][oriX + offsetX] == MapObject::SPIKE)
 	{
-		// 캐릭터의 경로에 움직이지 않는가시가 있을경우 피해를 입음.
+		// 캐릭터의 경로에 가시가 있을경우 피해를 입음.
 		pPlayer->PlayerMoveAnim();
 		pPlayer->PlayerMove(pos);
 		mapStage[oriY][oriX] = MapObject::EMPTY;
@@ -497,6 +481,15 @@ void GameManager::Logic(int offsetX, int offsetY, int oriX, int oriY, Vec2 pos)
 	{
 		// 캐릭터의 행동 후에도 플레이어가 가시위에 있다면 데미지를 입음.
 		scheduleOnce(schedule_selector(GameManager::Damaged), 0.1f);
+
+		auto move1 = MoveBy::create(0.012f, Vec2(13, 13));
+		auto move2 = MoveBy::create(0.012f, Vec2(-26, -26));
+		auto move3 = MoveBy::create(0.012f, Vec2(0, 26));
+		auto move4 = MoveBy::create(0.012f, Vec2(26, -26));
+		auto move5 = MoveBy::create(0.012f, Vec2(-13, 13));
+
+		this->runAction(Sequence::create(move1, move2, move3, move4, move5, nullptr));
+
 		MoveChance--;
 	}
 
@@ -519,7 +512,7 @@ void GameManager::Damaged(float f)
 
 void GameManager::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event)
 {
-	if (isClear == false)
+	if (isClear == false && isMove == false)
 	{
 		switch (keycode)
 		{
@@ -529,18 +522,26 @@ void GameManager::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d:
 
 		case EventKeyboard::KeyCode::KEY_UP_ARROW:
 			this->Logic(0, 1, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(0, 100));
+			isMove = true;
+			scheduleOnce(schedule_selector(GameManager::MoveStandBy), 0.15f);
 			break;
 
 		case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 			this->Logic(0, -1, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(0, -100));
+			isMove = true;
+			scheduleOnce(schedule_selector(GameManager::MoveStandBy), 0.15f);
 			break;
 
 		case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 			this->Logic(-1, 0, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(-100, 0));
+			isMove = true;
+			scheduleOnce(schedule_selector(GameManager::MoveStandBy), 0.15f);
 			break;
 
 		case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 			this->Logic(1, 0, pPlayer->_mapPos.x, pPlayer->_mapPos.y, Vec2(100, 0));
+			isMove = true;
+			scheduleOnce(schedule_selector(GameManager::MoveStandBy), 0.15f);
 			break;
 		}
 	}
@@ -645,7 +646,7 @@ void GameManager::PlayerDie()
 
 	auto EffectAnim = Animation::create();
 
-	EffectAnim->setDelayPerUnit(0.1f);
+	EffectAnim->setDelayPerUnit(0.08f);
 
 	char str3[100] = { 0, };
 
@@ -665,5 +666,10 @@ void GameManager::PlayerDie()
 void GameManager::NextStage(float f)
 {
 	isGonextMap = true;
+}
+
+void GameManager::MoveStandBy(float f)
+{
+	isMove = false;
 }
 

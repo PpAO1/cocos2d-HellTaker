@@ -36,6 +36,7 @@ public:
 	bool pressF;
 	bool isClear;
 	bool isGonextMap;
+	bool isMove;
 
 	cocos2d::Vec2 stage1StartPos;
 
@@ -72,6 +73,7 @@ public:
 	void StageClear(float f);
 	void PlayerDie();
 	void NextStage(float f);
+	void MoveStandBy(float f);
 };
 
 template<typename T>

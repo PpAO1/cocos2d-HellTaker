@@ -143,13 +143,6 @@ void Player::PlayerDamagedAnim()
 	huge->runAction(Sequence::create(animate, removeanim, nullptr));
 }
 
-
-
-void Player::update(float f)
-{
-
-}
-
 void Player::PlayerMove(cocos2d::Vec2 pos)
 {
 	auto playermove = MoveBy::create(0.15f, pos);

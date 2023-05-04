@@ -53,7 +53,7 @@ void MainScene03::update(float f)
 {
 	if (gameLayer->isRestart)
 	{
-		scheduleOnce(schedule_selector(MainScene03::Restart), 1.8f);
+		scheduleOnce(schedule_selector(MainScene03::Restart), 1.44f);
 		gameLayer->isRestart = false;
 
 		this->unscheduleUpdate();

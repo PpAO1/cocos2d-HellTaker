@@ -20,7 +20,4 @@ public:
 
 	Coordinate _mapPos;
 	void SkeletonMove(cocos2d::Vec2 pos);
-
-	void update(float f);
-
 };
